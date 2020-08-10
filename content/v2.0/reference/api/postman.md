@@ -38,3 +38,8 @@ Use the **Authorization** tab in Postman to include the credentials required whe
 To test the authentication, enter the `/health` endpoint of a local or Cloud instance of InfluxDB into the address bar
 (for example, http://localhost:9999/api/v2/health or https://us-west-2-1.aws.cloud2.influxdata.com/api/v2/health)
 and then click **Send**.
+
+## Create a bucket with Postman
+
+Be sure you can send authenticated API requests with Postman (see above).
+

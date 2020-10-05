@@ -12,6 +12,7 @@ weight: 1
 
 InfluxDB Enterprise offers highly scalable InfluxDB Enterprise clusters on your infrastructure
 with a management UI.
+
 Use InfluxDB Enterprise to:
 
 * Monitor your cluster
@@ -33,3 +34,12 @@ Use InfluxDB Enterprise to:
 If you're interested in working with InfluxDB Enterprise, visit
 [InfluxPortal](https://portal.influxdata.com/) to sign up, get a license key,
 and get started!
+
+
+Discover key offerings in Enterprise:
+
+- Cluster features
+- User roles/permissions/fine-grain auth
+
+Next, check out [installation requirements]() and how to [get started]().
+

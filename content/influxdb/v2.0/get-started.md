@@ -13,6 +13,7 @@ aliases:
 
 The InfluxDB 2.0 time series platform is purpose-built to collect, store,
 process and visualize metrics and events.
+
 To get started with InfluxDB OSS 2.0, do the following:
 
 1. [Download and install InfluxDB](#download-and-install-influxdb-2-0).
@@ -45,6 +46,8 @@ For added security, use `gpg` to verify the signature of your download.
 (Most operating systems include the `gpg` command by default.
 If `gpg` is not available, see the [GnuPG homepage](https://gnupg.org/download/) for installation instructions.)
 
+{{% truncate %}}
+
 1. Download and import InfluxData's public key:
 
     ```
@@ -69,6 +72,7 @@ If `gpg` is not available, see the [GnuPG homepage](https://gnupg.org/download/)
     ```
     gpg: Good signature from "InfluxData <support@influxdata.com>" [unknown]
     ```
+{{% /truncate %}}
 ### Place the executables in your $PATH
 
 In a terminal, for example, **[iTerm2](https://www.iterm2.com/)**, unpackage the downloaded archive and place the `influx` and `influxd` executables in your system `$PATH`.
@@ -112,6 +116,8 @@ We are in the process of updating our build process to ensure released binaries 
 
 ## Start InfluxDB
 
+(**macOS or Linux only**)
+
 Start InfluxDB by running the `influxd` daemon:
 
 ```bash
@@ -151,6 +157,7 @@ available `influxd` flags and options, see the [`influxd` documentation](/influx
 For added security, use `gpg` to verify the signature of your download.
 (Most operating systems include the `gpg` command by default.
 If `gpg` is not available, see the [GnuPG homepage](https://gnupg.org/download/) for installation instructions.)
+{{% truncate %}}
 
 1. Download and import InfluxData's public key:
 
@@ -176,7 +183,7 @@ If `gpg` is not available, see the [GnuPG homepage](https://gnupg.org/download/)
     ```
     gpg: Good signature from "InfluxData <support@influxdata.com>" [unknown]
     ```
-
+{{% /truncate %}}
 ### Place the executables in your $PATH
 
 In a terminal, for example, [**Terminator**](https://terminator-gtk3.readthedocs.io/en/latest/), unpackage the downloaded archive and place the `influx` and `influxd` executables in your system `$PATH`.
@@ -414,23 +421,31 @@ to provide the required information.
 
 ## Explore the next steps
 
+After installing InfluxDB, check out the next steps to get started using InfluxDB:
+
+- Collect and write data
+- Query data
+- Process data
+- Visualize data
+- Monitor and alert
+
 ### Collect and write data
 
-Collect and write data to InfluxDB using the Telegraf plugins, the InfluxDB v2 API, the `influx`
+Collect and write data to InfluxDB using any of the following methods: Telegraf plugins, use scrapers, the InfluxDB v2 API, the `influx`
 command line interface (CLI), the InfluxDB UI (the user interface for InfluxDB 2.0), or the InfluxDB v2 API client libraries.
 
 #### Use Telegraf
 
-Use Telegraf to quickly write data to {{< cloud-name >}}.
+Use Telegraf to quickly write data to InfluxDB.
 Create new Telegraf configurations automatically in the InfluxDB UI, or manually update an
-existing Telegraf configuration to send data to your {{< cloud-name "short" >}} instance.
+existing Telegraf configuration to send data to your InfluxDB instance.
 
 For details, see [Automatically configure Telegraf](/influxdb/v2.0/write-data/no-code/use-telegraf/auto-config/)
 and [Manually update Telegraf configurations](/influxdb/v2.0/write-data/no-code/use-telegraf/manual-config/).
 
 #### Scrape data
 
-**InfluxDB OSS** lets you scrape Prometheus-formatted metrics from HTTP endpoints.
+Scrape Prometheus-formatted metrics from HTTP endpoints.
 For details, see [Scrape data](/influxdb/v2.0/write-data/no-code/scrape-data/).
 
 #### API, CLI, and client libraries

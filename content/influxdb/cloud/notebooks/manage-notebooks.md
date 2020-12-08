@@ -15,7 +15,7 @@ menu:
 
 View, update, and delete notebooks in the UI.
 
-## View or update notebooks
+## View or update a notebook
 1. In the navigation menu on the left, click **Notebooks**.
 
     {{< nav-icon "notebooks" >}}

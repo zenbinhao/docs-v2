@@ -20,7 +20,8 @@ only a stream will return all annotations inside that stream, etc...
 Adds an API to read/write annotations.
 
 Each annotation belongs to a single stream.
-Annotations also can be filtered by a time window, which is useful for visualization layers to only retrieve annotations that fit a displayed amount of time.
+Annotations also can be filtered by a time window,
+which is useful for visualization layers to only retrieve annotations that fit a displayed amount of time.
 
 Streams can be described, as a stream is represented typically by a single word string.
 Whenever an annotation is written to a stream, that stream is gets "updated" with the current time

@@ -8,8 +8,6 @@ menu:
     parent: Input data formats
 ---
 
-# Nagios
-
 The Nagios input data format parses the output of
 [Nagios plugins](https://www.nagios.org/downloads/nagios-plugins/) into
 Telegraf metrics.

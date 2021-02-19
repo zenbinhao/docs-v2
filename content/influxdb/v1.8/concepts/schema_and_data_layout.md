@@ -12,14 +12,10 @@ menu:
 Every InfluxDB use case is special and your [schema](/influxdb/v1.8/concepts/glossary/#schema) will reflect that uniqueness.
 There are, however, general guidelines to follow and pitfalls to avoid when designing your schema.
 
-<table style="width:100%">
-  <tr>
-    <td><a href="#general-recommendations">General Recommendations</a></td>
-    <td><a href="#encouraged-schema-design">Encouraged Schema Design</a></td>
-    <td><a href="#discouraged-schema-design">Discouraged Schema Design</a></td>
-    <td><a href="#shard-group-duration-management">Shard Group Duration Management</a></td>
-  </tr>
-</table>
+- [General Recommendations](#general-recommendations)
+  - [Encouraged Schema Design](#encouraged-schema-design)
+  - [Discouraged Schema Design](#discouraged-schema-design)
+- [Shard Group Duration Management](#shard-group-duration-management)
 
 ## General recommendations
 
@@ -226,13 +222,13 @@ For example, if your RP has a duration of one day, InfluxDB will drop an hour's 
 The default shard group durations work well for most cases. However, high-throughput or long-running instances will benefit from using longer shard group durations.
 Here are some recommendations for longer shard group durations:
 
-| RP Duration  | Shard Group Duration  |
-|---|---|
-| <= 1 day  | 6 hours  |
-| > 1 day and <= 7 days  | 1 day  |
-| > 7 days and <= 3 months  | 7 days  |
-| > 3 months  | 30 days  |
-| infinite  | 52 weeks or longer  |
+| RP Duration              | Shard Group Duration |
+|:---                      |:---                  |
+| <= 1 day                 | 6 hours              |
+| > 1 day and <= 7 days    | 1 day                |
+| > 7 days and <= 3 months | 7 days               |
+| > 3 months               | 30 days              |
+| infinite                 | 52 weeks or longer   |
 
 > **Note:** Note that `INF` (infinite) is not a [valid shard group duration](/influxdb/v1.8/query_language/manage-database/#retention-policy-management).
 In extreme cases where data covers decades and will never be deleted, a long shard group duration like `1040w` (20 years) is perfectly valid.

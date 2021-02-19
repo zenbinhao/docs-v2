@@ -67,16 +67,20 @@ file (the hostnames below are representative).
 <Data_2_IP> enterprise-data-02
 ```
 
-> **Verification steps:**
->
+{{% note %}}
+**Verification steps:**
+
 Before proceeding with the installation, verify on each meta node and data node server that the other
 servers are resolvable. Here is an example set of shell commands using `ping`:
->
-    ping -qc 1 enterprise-meta-01
-    ping -qc 1 enterprise-meta-02
-    ping -qc 1 enterprise-meta-03
-    ping -qc 1 enterprise-data-01
-    ping -qc 1 enterprise-data-02
+
+```
+ping -qc 1 enterprise-meta-01
+ping -qc 1 enterprise-meta-02
+ping -qc 1 enterprise-meta-03
+ping -qc 1 enterprise-data-01
+ping -qc 1 enterprise-data-02
+```
+{{% /note %}}
 
 If there are any connectivity issues resolve them before proceeding with the
 installation.

@@ -11,22 +11,15 @@ menu:
 Every InfluxDB use case is special and your [schema](/influxdb/v1.6/concepts/glossary/#schema) will reflect that uniqueness.
 There are, however, general guidelines to follow and pitfalls to avoid when designing your schema.
 
-<table style="width:100%">
-  <tr>
-    <td><a href="#general-recommendations">General Recommendations</a></td>
-    <td><a href="#encouraged-schema-design">Encouraged Schema Design</a></td>
-    <td><a href="#discouraged-schema-design">Discouraged Schema Design</a></td>
-    <td><a href="#shard-group-duration-management">Shard Group Duration Management</a></td>
-  </tr>
-</table>
-
-# General recommendations
+- [Encouraged Schema Design](#encouraged-schema-design)
+- [Discouraged Schema Design](#discouraged-schema-design)
+- [Shard Group Duration Management](#shard-group-duration-management)
 
 ## Encouraged schema design
 
 In no particular order, we recommend that you:
 
-### *Encode meta data in tags*
+### Encode meta data in tags
 
 [Tags](/influxdb/v1.6/concepts/glossary/#tag) are indexed and [fields](/influxdb/v1.6/concepts/glossary/#field) are not indexed.
 This means that queries on tags are more performant than those on fields.
@@ -38,7 +31,7 @@ In general, your queries should guide what gets stored as a tag and what gets st
 * Store data in fields if you plan to use them with an [InfluxQL function](/influxdb/v1.6/query_language/functions/)
 * Store data in fields if you *need* them to be something other than a string - [tag values](/influxdb/v1.6/concepts/glossary/#tag-value) are always interpreted as strings
 
-### *Avoid using InfluxQL keywords as identifier names*
+### Avoid using InfluxQL keywords as identifier names
 
 This isn't necessary, but it simplifies writing queries; you won't have to wrap those identifiers in double quotes.
 Identifiers are database names, [retention policy](/influxdb/v1.6/concepts/glossary/#retention-policy-rp) names, [user](/influxdb/v1.6/concepts/glossary/#user) names, [measurement](/influxdb/v1.6/concepts/glossary/#measurement) names, [tag keys](/influxdb/v1.6/concepts/glossary/#tag-key), and [field keys](/influxdb/v1.6/concepts/glossary/#field-key).
@@ -50,12 +43,12 @@ Note that you will also need to wrap identifiers in double quotes in queries if 
 
 In no particular order, we recommend that you:
 
-### *Don't have too many series*
+### Don't have too many series
 
 [Tags](/influxdb/v1.6/concepts/glossary/#tag) containing highly variable information like UUIDs, hashes, and random strings will lead to a large number of series in the database, known colloquially as high series cardinality.
 High series cardinality is a primary driver of high memory usage for many database workloads.
 
-### *Don't encode data in measurement names*
+### Don't encode data in measurement names
 
 In general, taking this step will simplify your queries.
 InfluxDB queries merge data that fall within the same [measurement](/influxdb/v1.6/concepts/glossary/#measurement); it's better to differentiate data with [tags](/influxdb/v1.6/concepts/glossary/#tag) than with detailed measurement names.
@@ -95,7 +88,7 @@ While both queries are relatively simple, use of the regular expression make cer
 > SELECT mean("temp") FROM "weather_sensor" WHERE "region" = 'north'
 ```
 
-### *Don't put more than one piece of information in one tag*
+### Don't put more than one piece of information in one tag
 
 Similar to the point above, splitting a single tag with multiple pieces into separate tags will simplify your queries and reduce the need for regular expressions.
 
@@ -131,9 +124,7 @@ While both queries are similar, the use of multiple tags in Schema 2 avoids the 
 > SELECT mean("temp") FROM "weather_sensor" WHERE region = 'north'
 ```
 
-# Shard group duration management
-
-## Shard group duration overview
+## Shard group duration management
 
 InfluxDB stores data in shard groups.
 Shard groups are organized by [retention policy](/influxdb/v1.6/concepts/glossary/#retention-policy-rp) (RP) and store data with timestamps that fall within a specific time interval.
@@ -141,11 +132,11 @@ The length of that time interval is called the [shard group duration](/influxdb/
 
 If no shard group duration is provided, the shard group duration is determined by the RP's [duration](/influxdb/v1.6/concepts/glossary/#duration) at the time the RP is created. The default values are:
 
-| RP Duration  | Shard Group Duration  |
-|---|---|
-| < 2 days  | 1 hour  |
-| >= 2 days and <= 6 months  | 1 day  |
-| > 6 months  | 7 days  |
+| RP Duration               | Shard Group Duration |
+|:---                       |:---                  |
+| < 2 days                  | 1 hour               |
+| >= 2 days and <= 6 months | 1 day                |
+| > 6 months                | 7 days               |
 
 The shard group duration is also configurable per RP.
 See [Retention Policy Management](/influxdb/v1.6/query_language/database_management/#retention-policy-management) for how to configure the

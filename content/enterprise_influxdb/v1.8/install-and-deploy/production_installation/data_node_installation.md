@@ -18,8 +18,7 @@ If you have not set up your meta nodes, please visit
 [Installing meta nodes](/enterprise_influxdb/v1.8/install-and-deploy/production_installation/meta_node_installation/).
 Bad things can happen if you complete the following steps without meta nodes.
 
-
-# Data node setup description and requirements
+## Data node setup description and requirements
 
 The Production Installation process sets up two [data nodes](/enterprise_influxdb/v1.8/concepts/glossary#data-node)
 and each data node runs on its own server.
@@ -63,8 +62,9 @@ data nodes on port `8086` (the default port for the [HTTP API](/influxdb/v1.8/to
 
 The installation package creates user `influxdb` that is used to run the influxdb data service.  `influxdb` user also owns  certain files that are needed for the service to start successfully.  In some cases, local policies may prevent the local user account from being created and the service fails to start.  Contact your systems administrator for assistance with this requirement.
 
-# Data node setup
-## Step 1: Add appropriate DNS entries for each of your servers
+## Data node setup
+
+### Step 1: Add appropriate DNS entries for each of your servers
 
 Ensure that your servers' hostnames and IP addresses are added to your network's DNS environment.
 The addition of DNS entries and IP assignment is usually site and policy specific; contact your DNS administrator for assistance as necessary.
@@ -75,42 +75,46 @@ Ultimately, use entries similar to the following (hostnames and domain IP addres
 | A           | ```enterprise-data-01.mydomain.com``` | ```<Data_1_IP>``` |
 | A           | ```enterprise-data-02.mydomain.com``` | ```<Data_2_IP>``` |
 
-> **Verification steps:**
->
+{{% note %}}
+**Verification steps:**
+
 Before proceeding with the installation, verify on each meta and data server that the other
 servers are resolvable. Here is an example set of shell commands using `ping`:
->
-    ping -qc 1 enterprise-meta-01
-    ping -qc 1 enterprise-meta-02
-    ping -qc 1 enterprise-meta-03
-    ping -qc 1 enterprise-data-01
-    ping -qc 1 enterprise-data-02
+
+```
+ping -qc 1 enterprise-meta-01
+ping -qc 1 enterprise-meta-02
+ping -qc 1 enterprise-meta-03
+ping -qc 1 enterprise-data-01
+ping -qc 1 enterprise-data-02
+```
+{{% /note %}}
 
 We highly recommend that each server be able to resolve the IP from the hostname alone as shown here.
 Resolve any connectivity issues before proceeding with the installation.
 A healthy cluster requires that every meta node and data node in a cluster be able to communicate.
 
-## Step 2: Set up, configure, and start the data node services
+### Step 2: Set up, configure, and start the data node services
 
 Perform the following steps on each data node.
 
-### I. Download and install the data service
+#### I. Download and install the data service
 
-#### Ubuntu and Debian (64-bit)
+##### Ubuntu and Debian (64-bit)
 
 ```bash
 wget https://dl.influxdata.com/enterprise/releases/influxdb-data_1.8.2-c1.8.2_amd64.deb
 sudo dpkg -i influxdb-data_1.8.2-c1.8.2_amd64.deb
 ```
 
-#### RedHat and CentOS (64-bit)
+##### RedHat and CentOS (64-bit)
 
 ```bash
 wget https://dl.influxdata.com/enterprise/releases/influxdb-data-1.8.2_c1.8.2.x86_64.rpm
 sudo yum localinstall influxdb-data-1.8.2_c1.8.2.x86_64.rpm
 ```
 
-#### Verify the authenticity of release download (recommended)
+##### Verify the authenticity of release download (recommended)
 
 For added security, follow these steps to verify the signature of your InfluxDB download with `gpg`.
 
@@ -139,7 +143,7 @@ For added security, follow these steps to verify the signature of your InfluxDB 
     gpg: Good signature from "InfluxDB Packaging Service <support@influxdb.com>" [unknown]
     ```
 
-### II. Edit the data node configuration files
+#### II. Edit the data node configuration files
 
 First, in `/etc/influxdb/influxdb.conf`:
 
@@ -209,15 +213,21 @@ On systemd systems, enter:
 sudo systemctl start influxdb
 ```
 
-> **Verification steps:**
->
+{{% note %}}
+**Verification steps:**
+
 Check to see that the process is running by entering:
->
-    ps aux | grep -v grep | grep influxdb
->
+
+```
+ps aux | grep -v grep | grep influxdb
+```
+
 You should see output similar to:
->
-    influxdb  2706  0.2  7.0 571008 35376 ?        Sl   15:37   0:16 /usr/bin/influxd -config /etc/influxdb/influxdb.conf
+
+```
+influxdb  2706  0.2  7.0 571008 35376 ?        Sl   15:37   0:16 /usr/bin/influxd -config /etc/influxdb/influxdb.conf
+```
+{{% /note %}}
 
 
 If you do not see the expected output, the process is either not launching or is exiting prematurely. Check the [logs](/enterprise_influxdb/v1.8/administration/logs/) for error messages and verify the previous setup steps are complete.
@@ -225,7 +235,7 @@ If you do not see the expected output, the process is either not launching or is
 If you see the expected output, repeat for the remaining data nodes.
 Once all data nodes have been installed, configured, and launched, move on to the next section to join the data nodes to the cluster.
 
-## Join the data nodes to the cluster
+### Join the data nodes to the cluster
 
 {{% warn %}}You should join your data nodes to the cluster only when you are adding a brand new node,
 either during the initial creation of your cluster or when growing the number of data nodes.
@@ -250,27 +260,33 @@ Added data node y at enterprise-data-0x:8088
 Run the `add-data` command once and only once for each data node you are joining
 to the cluster.
 
-> **Verification steps:**
->
-Issue the following command on any meta node:
->
-    influxd-ctl show
->
-The expected output is:
->
-    Data Nodes
-    ==========
-    ID   TCP Address               Version
-    4    enterprise-data-01:8088   1.8.2-c1.8.2
-    5    enterprise-data-02:8088   1.8.2-c1.8.2
+{{% note %}}
+ **Verification steps:**
 
->
-    Meta Nodes
-    ==========
-    TCP Address               Version
-    enterprise-meta-01:8091   1.8.2-c1.8.2
-    enterprise-meta-02:8091   1.8.2-c1.8.2
-    enterprise-meta-03:8091   1.8.2-c1.8.2
+Issue the following command on any meta node:
+
+```
+influxd-ctl show
+```
+
+The expected output is:
+
+```
+Data Nodes
+==========
+ID   TCP Address               Version
+4    enterprise-data-01:8088   1.8.2-c1.8.2
+5    enterprise-data-02:8088   1.8.2-c1.8.2
+
+
+Meta Nodes
+==========
+TCP Address               Version
+enterprise-meta-01:8091   1.8.2-c1.8.2
+enterprise-meta-02:8091   1.8.2-c1.8.2
+enterprise-meta-03:8091   1.8.2-c1.8.2
+```
+{{% /note %}}
 
 
 The output should include every data node that was added to the cluster.

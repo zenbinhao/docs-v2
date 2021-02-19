@@ -6,12 +6,10 @@ menu:
     parent: Concepts
 ---
 
-# What's in a database?
-
 This page gives SQL users an overview of how InfluxDB is like an SQL database and how it's not.
 It highlights some of the major distinctions between the two and provides a loose crosswalk between the different database terminologies and query languages.
 
-## In general...
+## In general
 
 InfluxDB is designed to work with time-series data.
 SQL databases can handle time-series but weren't created strictly for that purpose.
@@ -180,7 +178,7 @@ For a full list check out the [functions](/influxdb/v1.4/query_language/function
 
 Now that you have the general idea, check out our [Getting Started Guide](/influxdb/v1.4/introduction/getting_started/).
 
-## A note on why InfluxDB isn't CRUD...
+## A note on why InfluxDB isn't CRUD
 
 InfluxDB is a database that has been optimized for time series data.
 This data commonly comes from sources like distributed sensor groups, click data from large websites, or lists of financial transactions.

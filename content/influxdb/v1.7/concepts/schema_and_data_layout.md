@@ -11,14 +11,9 @@ menu:
 Every InfluxDB use case is special and your [schema](/influxdb/v1.7/concepts/glossary/#schema) will reflect that uniqueness.
 There are, however, general guidelines to follow and pitfalls to avoid when designing your schema.
 
-<table style="width:100%">
-  <tr>
-    <td><a href="#general-recommendations">General Recommendations</a></td>
-    <td><a href="#encouraged-schema-design">Encouraged Schema Design</a></td>
-    <td><a href="#discouraged-schema-design">Discouraged Schema Design</a></td>
-    <td><a href="#shard-group-duration-management">Shard Group Duration Management</a></td>
-  </tr>
-</table>
+- [Encouraged Schema Design](#encouraged-schema-design)
+- [Discouraged Schema Design](#discouraged-schema-design)
+- [Shard Group Duration Management](#shard-group-duration-management)
 
 # General recommendations
 

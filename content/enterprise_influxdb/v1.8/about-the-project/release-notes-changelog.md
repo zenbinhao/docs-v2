@@ -842,10 +842,9 @@ Backup and restore has been updated to fix issues and refine existing capabiliti
 - Fix Hinted handoff panic around segment size check
 - Drop Hinted Handoff writes if they contain field type inconsistencies
 
-<br>
-# Web Console
+## Web Console
 
-## DEPRECATED: Enterprise Web Console
+### DEPRECATED: Enterprise Web Console
 
 The Enterprise Web Console has officially been deprecated and will be eliminated entirely by the end of 2017.
 No additional features will be added and no additional bug fix releases are planned.

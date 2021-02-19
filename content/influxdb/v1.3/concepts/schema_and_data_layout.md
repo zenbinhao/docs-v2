@@ -9,16 +9,9 @@ menu:
 Every InfluxDB use case is special and your [schema](/influxdb/v1.3/concepts/glossary/#schema) will reflect that uniqueness.
 There are, however, general guidelines to follow and pitfalls to avoid when designing your schema.
 
-<table style="width:100%">
-  <tr>
-    <td><a href="#general-recommendations">General Recommendations</a></td>
-    <td><a href="#encouraged-schema-design">Encouraged Schema Design</a></td>
-    <td><a href="#discouraged-schema-design">Discouraged Schema Design</a></td>
-    <td><a href="#shard-group-duration-management">Shard Group Duration Management</a></td>
-  </tr>
-</table>
-
-# General Recommendations
+- [Encouraged Schema Design](#encouraged-schema-design)
+- [Discouraged Schema Design](#discouraged-schema-design)
+- [Shard Group Duration Management](#shard-group-duration-management)
 
 ## Encouraged Schema Design
 
@@ -95,7 +88,7 @@ While both queries are relatively simple, use of the regular expression make cer
 > SELECT mean("temp") FROM "weather_sensor" WHERE "region" = 'north'
 ```
 
-### *Don't put more than one piece of information in one tag*
+### Don't put more than one piece of information in one tag
 
 Similar to the point above, splitting a single tag with multiple pieces into separate tags will simplify your queries and reduce the need for regular expressions.
 
@@ -131,9 +124,7 @@ While both queries are similar, the use of multiple tags in Schema 2 avoids the 
 > SELECT mean("temp") FROM "weather_sensor" WHERE region = 'north'
 ```
 
-# Shard Group Duration Management
-
-## Shard Group Duration Overview
+## Shard Group Duration Management
 
 InfluxDB stores data in shard groups.
 Shard groups are organized by [retention policy](/influxdb/v1.3/concepts/glossary/#retention-policy-rp) (RP) and store data with timestamps that fall within a specific time interval.
@@ -141,11 +132,11 @@ The length of that time interval is called the [shard group duration](/influxdb/
 
 By default, the shard group duration is determined by the RP's [duration](/influxdb/v1.3/concepts/glossary/#duration):
 
-| RP Duration  | Shard Group Duration  |
-|---|---|
-| < 2 days  | 1 hour  |
-| >= 2 days and <= 6 months  | 1 day  |
-| > 6 months  | 7 days  |
+| RP Duration               | Shard Group Duration |
+|:---                       |:---                  |
+| < 2 days                  | 1 hour               |
+| >= 2 days and <= 6 months | 1 day                |
+| > 6 months                | 7 days               |
 
 The shard group duration is also configurable per RP.
 See [Retention Policy Management](/influxdb/v1.3/query_language/database_management/#retention-policy-management) for how to configure the

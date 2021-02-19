@@ -23,7 +23,7 @@
         {{ $scratch.Set "description" .description }}
 
         {{ if in .description "{{< latest" }}
-          {{ $latestInstances := findRE `{{< latest .* >}}` .description }}
+          {{ $latestInstances := findRE `{{< latest .* >}}` .description | uniq }}
           {{ range $latestInstances }}
             {{ $tmpDescription := $scratch.Get "description" }}
             {{ $product := replaceRE `"` "" (index (findRE `"[a-z_]*"` .) 0 ) }}

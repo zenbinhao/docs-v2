@@ -256,7 +256,7 @@ Please see the OSS [release notes](https://github.com/influxdata/influxdb/blob/1
 
 ### Configuration changes
 
-The following configuration changes may need to changed before [upgrading](/enterprise_influxdb/v1.3/administration/upgrading/) to 1.2.2 from prior versions.
+The following configuration changes may need to changed before [upgrading](/enterprise_influxdb/v1.5/administration/upgrading/) to 1.2.2 from prior versions.
 
 #### shard-writer-timeout
 

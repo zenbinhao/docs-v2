@@ -119,7 +119,7 @@ Load data into InfluxDB.
 All that we have to do is to **log-in** into the InfluxDB web interface, select the **data** section, and create a new bucket called **ratings**.
 Then, the option **add data** allows us to load the data directly in line protocol format.
 
-<!-- 
+<!--
 **##### Note**
 - Start Time: 2020-01-01T00:00:00Z
 - Stop Time: 2020-01-20T00:00:00Z

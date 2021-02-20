@@ -10,7 +10,6 @@ menu:
 weight: 209
 related:
 ---
-
 <!-- list_query_example: percentages -->
 
 ## Use Case Description
@@ -20,7 +19,6 @@ A review can be submitted using different *channels*: iOS, Android, and Web.
 To provide feedback the users evaluate their satisfaction by rating the product with **stars**, an integer value from 1 to 5.
 In addition, the system automatically verifies if the user bought the product or not.
 
-<!-- To summarize,  -->
 Each time a user provides a review, the Amazing system collects the following information:
 
 - `product_id`: the id of the product reviewed;
@@ -48,21 +46,29 @@ or all reviews below 3 stars.
 
 ## Before you begin
 
-- An account on [InfluxDB Cloud](https://eu-central-1-1.aws.cloud2.influxdata.com/login)
-- The data provided in `data/ratings.txt`
-- Familiarity with the concept of time series
+Know how to run InfluxDB.
+See [Get started]().
+
+<!-- - An account on [InfluxDB Cloud](https://eu-central-1-1.aws.cloud2.influxdata.com/login) -->
+<!-- - Familiarity with the concept of time series -->
 
 ## Steps
-    
+
+We'll use the data provided in `data/ratings.txt`
+
 1. Prepare the data
 2. Store the data in InfluxDB
 3. Select a time interval of the data
 4. Filter the data
 
-# Prepare the data
-<!-- ### Simple Data Modeling -->
+### Prepare the data
+#### Simple Data Modeling
+
+Model the data so we can use it withInfluxDB.
 
 See [doc write data](https://v2.docs.influxdata.com/v2.0/write-data/).
+
+<!-- TODO link to line protocol
 
 An InfluxDB database stores data points.
 A data point has four components:
@@ -71,16 +77,17 @@ A data point has four components:
 - tagset: key/value string pairs usually used to identify the point.
 - fieldset: key/value pairs that are typed and usually contain the point data.
 - timestamp: date and time associated with the fields.
+ -->
 
 Identify the measurement, tagset, fieldset, and timestamp for our use case.
 
-<!-- ##### Solution [TO BE HIDDEN FROM THE READER] -->
+**##### Solution [TO BE HIDDEN FROM THE READER]**
 - measurement: "ratings"
 - tagset: user_id, product_id, channel, verified
 - fieldset: stars
 - timestamp: date
 
-<!-- #### InfluxDB data point serialization -->
+#### InfluxDB data point serialization
 
 The serialization format for data points is defined by the line protocol.
 An example of data point from the specification helps to explain the terminology:
@@ -91,10 +98,10 @@ measurement,tag1=tag1Value,tag2=tag2Value field1=field1Value,field2=field2Value 
 
 The timestamp has to be in UTC and Unix format (up to nanosecond precision).
 
-<!-- ##### Let's cook -->
+**##### Let's cook**
 Serialize the reviews reported in the table above using line protocol.
 
-<!-- ##### Solution [TO BE HIDDEN FROM THE READER] -->
+**##### Solution [TO BE HIDDEN FROM THE READER]**
 
 ```
 ratings,user_id=4,product_id=3,channel=iOS,verified=true stars=4 1577834352191000000
@@ -104,37 +111,31 @@ ratings,user_id=1,product_id=2,channel=iOS,verified=false stars=5 15779214834480
 ratings,user_id=1,product_id=2,channel=Android,verified=false stars=2 1577922010760000000
 ```
 
+### Store the data in InfluxDB
 
-# Store the data in InfluxDB
-<!-- #### Load data in Flux -->
-
-InfluxDB is provided with Flux, a composable, easy to learn, and highly productive data scripting language.
-Before going on, we need to load the data.
-Flux organizes the data in buckets.
+Load data into InfluxDB.
+<!-- InfluxDB is provided with Flux, a composable, easy to learn, and highly productive data scripting language. -->
 All that we have to do is to **log-in** into the InfluxDB web interface, select the **data** section, and create a new bucket called **ratings**.
 Then, the option **add data** allows us to load the data directly in line protocol format.
 
-<!-- ##### Let's cook -->
-
-Load data/ratings.txt into the ratings bucket
-
-<!-- ##### Note -->
-
+<!-- 
+**##### Note**
 - Start Time: 2020-01-01T00:00:00Z
 - Stop Time: 2020-01-20T00:00:00Z
+-->
 
-# Select a time interval of the data
-
-#### Range
+### Select a time interval of the data
 
 The first element to specify in a query is the bucket from which to take the data.
+This is what the [`from()`]() function is for.
 In our case, we use the **ratings** bucket.
 
 ```
 from(bucket: "ratings")
 ```
 
-Then, since all the reviews loaded before have temporal dependencies, we need to select the time range of data to show using the **[doc range](https://v2.docs.influxdata.com/v2.0/reference/flux/stdlib/built-in/transformations/range/)** function.
+Then, since all the reviews loaded before have temporal dependencies,
+we need to select the time range of data to show using the [`range`]() function.
 There are two options to define a range:
 
 **Absolute**: reviews produced between 01/01/2020 00:00 and 04/01/2020 00:00
@@ -151,25 +152,26 @@ from(bucket: "ratings")
     |> range(start:-2h)
 ```
 
-##### Note*
-The pipe forward operator **|>** is used to concatenate all the steps of the script.
+The pipe forward operator `|>` is used to concatenate all the steps of the script.
 
-##### Let's cook
+**##### Let's cook**
 
 Select all the reviews produced between 01/01/2020 00:00 and 05/01/2020 00:00.
 
-##### Solution [TO BE HIDDEN FROM THE READER]
+**##### Solution [TO BE HIDDEN FROM THE READER]**
 
 ```
 from(bucket: "ratings")
     |> range(start:2020-01-01T00:00:00Z, stop: 2020-01-05T00:00:00Z)
 ```
 
-# Filter the data
+### Filter the data
 
 #### Filter by Tag
 
-In the following example, we use Flux to help John, a data analyst at Amazing company, that is interested in selecting the reviews provided through the Android channel between 01/01/2020 00:00 and 20/01/2020 00:00.
+In the following example, we use Flux to select the reviews
+provided through the Android channel
+between 01/01/2020 00:00 and 20/01/2020 00:00.
 
 ```
 from(bucket: "ratings")
@@ -179,16 +181,16 @@ from(bucket: "ratings")
     |> filter(fn: (r) => r.channel == "Android")
 ```
 
-The **[filter()](https://v2.docs.influxdata.com/v2.0/reference/flux/stdlib/built-in/transformations/filter/)** function filters data based on conditions defined in a predicate function **(fn)**.
-It takes in input **(r)** that represents a single table row and it outputs if the current row should be selected or not.
-This script selects only the rows with **channel = Android**.
-Filtering on the **measurement** and **_field** fields is a best practice since a bucket can contain multiple measurements or fields.
+The [`filter()`]() function filters data based on conditions defined in a predicate function `(fn)`.
+It takes in input `(r)` that represents a single table row and it outputs if the current row should be selected or not.
+This script selects only the rows with `channel = Android`.
+Filtering on the `measurement` and `_field` fields is a best practice since a bucket can contain multiple measurements or fields.
 
-##### Let's cook
+**##### Let's cook**
 
 Write a query to select only the verified reviews between 01/01/2020 00:00 and 20/01/2020 00:00.
 
-##### Solution [TO BE HIDDEN FROM THE READER]
+**##### Solution [TO BE HIDDEN FROM THE READER]**
 
 ```
 from(bucket: "ratings")
@@ -213,11 +215,11 @@ from(bucket: "ratings")
 
 To access the value of stars, we have to use the **_value** field.
 
-##### Let's cook
+**##### Let's cook**
 
 Write a query to select only the poor reviews (e.g., less than 3 stars) between 01/01/2020 00:00 and 20/01/2020 00:00.
 
-##### Solution [TO BE HIDDEN FROM THE READER]
+****##### Solution [TO BE HIDDEN FROM THE READER]**
 
 ```
 from(bucket: "ratings")
@@ -226,7 +228,6 @@ from(bucket: "ratings")
     |> filter(fn: (r) => r._field == "stars")
     |> filter(fn: (r) => r._value < 3)
 ```
-
 
 <!--
 Based on work by:

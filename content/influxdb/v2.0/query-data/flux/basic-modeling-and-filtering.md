@@ -54,7 +54,7 @@ See [Get started]().
 
 ## Steps
 
-We'll use the data provided in `data/ratings.txt`
+Use the data provided in [`data/ratings.txt`](https://github.com/influxdata/docs-v2/blob/master/static/downloads/influxdb-k8-minikube.yaml).
 
 1. Prepare the data
 2. Store the data in InfluxDB

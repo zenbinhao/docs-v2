@@ -53,13 +53,14 @@ or all reviews below 3 stars.
 - Familiarity with the concept of time series
 
 ## Steps
+    
+1. Prepare the data
+2. Store the data in InfluxDB
+3. Select a time interval of the data
+4. Filter the data
 
- 1. Prepare the data
- 2. Store the data in InfluxDB
- 3. Select a time interval of the data
- 4. Filter the data
-
-#### Simple Data Modeling
+# Prepare the data
+<!-- ### Simple Data Modeling -->
 
 See [doc write data](https://v2.docs.influxdata.com/v2.0/write-data/).
 
@@ -73,13 +74,13 @@ A data point has four components:
 
 Identify the measurement, tagset, fieldset, and timestamp for our use case.
 
-##### Solution [TO BE HIDDEN FROM THE READER]
+<!-- ##### Solution [TO BE HIDDEN FROM THE READER] -->
 - measurement: "ratings"
 - tagset: user_id, product_id, channel, verified
 - fieldset: stars
 - timestamp: date
 
-#### InfluxDB data point serialization
+<!-- #### InfluxDB data point serialization -->
 
 The serialization format for data points is defined by the line protocol.
 An example of data point from the specification helps to explain the terminology:
@@ -90,10 +91,10 @@ measurement,tag1=tag1Value,tag2=tag2Value field1=field1Value,field2=field2Value 
 
 The timestamp has to be in UTC and Unix format (up to nanosecond precision).
 
-##### Let's cook
+<!-- ##### Let's cook -->
 Serialize the reviews reported in the table above using line protocol.
 
-##### Solution [TO BE HIDDEN FROM THE READER]
+<!-- ##### Solution [TO BE HIDDEN FROM THE READER] -->
 
 ```
 ratings,user_id=4,product_id=3,channel=iOS,verified=true stars=4 1577834352191000000
@@ -103,7 +104,9 @@ ratings,user_id=1,product_id=2,channel=iOS,verified=false stars=5 15779214834480
 ratings,user_id=1,product_id=2,channel=Android,verified=false stars=2 1577922010760000000
 ```
 
-#### Load data in Flux
+
+# Store the data in InfluxDB
+<!-- #### Load data in Flux -->
 
 InfluxDB is provided with Flux, a composable, easy to learn, and highly productive data scripting language.
 Before going on, we need to load the data.
@@ -111,14 +114,16 @@ Flux organizes the data in buckets.
 All that we have to do is to **log-in** into the InfluxDB web interface, select the **data** section, and create a new bucket called **ratings**.
 Then, the option **add data** allows us to load the data directly in line protocol format.
 
-##### Let's cook
+<!-- ##### Let's cook -->
 
 Load data/ratings.txt into the ratings bucket
 
-##### Note
+<!-- ##### Note -->
 
 - Start Time: 2020-01-01T00:00:00Z
 - Stop Time: 2020-01-20T00:00:00Z
+
+# Select a time interval of the data
 
 #### Range
 
@@ -159,6 +164,8 @@ Select all the reviews produced between 01/01/2020 00:00 and 05/01/2020 00:00.
 from(bucket: "ratings")
     |> range(start:2020-01-01T00:00:00Z, stop: 2020-01-05T00:00:00Z)
 ```
+
+# Filter the data
 
 #### Filter by Tag
 
@@ -220,9 +227,11 @@ from(bucket: "ratings")
     |> filter(fn: (r) => r._value < 3)
 ```
 
+
 <!--
 Based on work by:
 Alessio Bernardo - alessio.bernardo@polimi.it
 Emanuele Falzone - emanuele.falzone@polimi.it
 Andrea Mauri - andrea.mauri@quantiaconsulting.com
 -->
+

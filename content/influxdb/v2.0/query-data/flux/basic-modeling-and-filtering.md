@@ -115,12 +115,6 @@ Then, the option **add data** allows us to load the data directly in line protoc
 
 Load data/ratings.txt into the ratings bucket
 
-![image info](images/create1.png)
-![image info](images/create2.png)
-![image info](images/create3.png)
-![image info](images/create4.png)
-![image info](images/create5.png)
-
 ##### Note
 
 - Start Time: 2020-01-01T00:00:00Z
@@ -145,16 +139,12 @@ from(bucket: "ratings")
     |> range(start:2020-01-01T00:00:00Z, stop: 2020-01-04T00:00:00Z)
 ```
 
-![image info](./images/q1.png)
-
 **Relative**: reviews produced in the last 2 hours.
 
 ```
 from(bucket: "ratings")
     |> range(start:-2h)
 ```
-
-![image info](./images/q2.png)
 
 ##### Note*
 The pipe forward operator **|>** is used to concatenate all the steps of the script.
@@ -170,8 +160,6 @@ from(bucket: "ratings")
     |> range(start:2020-01-01T00:00:00Z, stop: 2020-01-05T00:00:00Z)
 ```
 
-![image info](./images/q3.png)
-
 #### E - Filter by Tag
 
 In the following example, we use Flux to help John, a data analyst at Amazing company, that is interested in selecting the reviews provided through the Android channel between 01/01/2020 00:00 and 20/01/2020 00:00.
@@ -183,8 +171,6 @@ from(bucket: "ratings")
     |> filter(fn: (r) => r._field == "stars")
     |> filter(fn: (r) => r.channel == "Android")
 ```
-
-![image info](./images/q4.png)
 
 The **[filter()](https://v2.docs.influxdata.com/v2.0/reference/flux/stdlib/built-in/transformations/filter/)** function filters data based on conditions defined in a predicate function **(fn)**.
 It takes in input **(r)** that represents a single table row and it outputs if the current row should be selected or not.
@@ -205,8 +191,6 @@ from(bucket: "ratings")
     |> filter(fn: (r) => r.verified == "true")
 ```
 
-![image info](./images/q5.png)
-
 #### F - Filter by Value
 
 In the following example, John wants to select the reviews provided through the Android channel with value greater or equal to 3 between 01/01/2020 00:00 and 20/01/2020 00:00.
@@ -219,8 +203,6 @@ from(bucket: "ratings")
     |> filter(fn: (r) => r.channel == "Android")
     |> filter(fn: (r) => r._value >= 3)
 ```
-
-![image info](./images/q6.png)
 
 To access the value of stars, we have to use the **_value** field.
 
@@ -237,8 +219,6 @@ from(bucket: "ratings")
     |> filter(fn: (r) => r._field == "stars")
     |> filter(fn: (r) => r._value < 3)
 ```
-
-![image info](./images/q7.png)
 
 <!--
 Based on work by:

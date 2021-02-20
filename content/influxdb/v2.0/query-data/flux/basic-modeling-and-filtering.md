@@ -40,26 +40,26 @@ The following table contains some example reviews:
 | 1       	| 2          	| iOS     	| false    	| 5     	| 1577921483448000000   |
 | 1       	| 2          	| Android 	| false    	| 2     	| 1577922010760000000   |
 
-### Goal
+## Goal
 
 The goal of this Flux example is to extract basic information about the product reviews from this data.
 For instance, we might want to select *only verified reviews*,
 or all reviews below 3 stars.
 
-### Before you begin
+## Before you begin
 
 - An account on [InfluxDB Cloud](https://eu-central-1-1.aws.cloud2.influxdata.com/login)
 - The data provided in `data/ratings.txt`
 - Familiarity with the concept of time series
 
-### Steps
+## Steps
 
  1. Prepare the data
  2. Store the data in InfluxDB
  3. Select a time interval of the data
  4. Filter the data
 
-#### A - Simple Data Modeling
+#### Simple Data Modeling
 
 See [doc write data](https://v2.docs.influxdata.com/v2.0/write-data/).
 
@@ -79,7 +79,7 @@ Identify the measurement, tagset, fieldset, and timestamp for our use case.
 - fieldset: stars
 - timestamp: date
 
-#### B - InfluxDB data point serialization
+#### InfluxDB data point serialization
 
 The serialization format for data points is defined by the line protocol.
 An example of data point from the specification helps to explain the terminology:
@@ -103,7 +103,7 @@ ratings,user_id=1,product_id=2,channel=iOS,verified=false stars=5 15779214834480
 ratings,user_id=1,product_id=2,channel=Android,verified=false stars=2 1577922010760000000
 ```
 
-#### C - Load data in Flux
+#### Load data in Flux
 
 InfluxDB is provided with Flux, a composable, easy to learn, and highly productive data scripting language.
 Before going on, we need to load the data.
@@ -120,7 +120,7 @@ Load data/ratings.txt into the ratings bucket
 - Start Time: 2020-01-01T00:00:00Z
 - Stop Time: 2020-01-20T00:00:00Z
 
-#### D - Range
+#### Range
 
 The first element to specify in a query is the bucket from which to take the data.
 In our case, we use the **ratings** bucket.
@@ -160,7 +160,7 @@ from(bucket: "ratings")
     |> range(start:2020-01-01T00:00:00Z, stop: 2020-01-05T00:00:00Z)
 ```
 
-#### E - Filter by Tag
+#### Filter by Tag
 
 In the following example, we use Flux to help John, a data analyst at Amazing company, that is interested in selecting the reviews provided through the Android channel between 01/01/2020 00:00 and 20/01/2020 00:00.
 
@@ -191,7 +191,7 @@ from(bucket: "ratings")
     |> filter(fn: (r) => r.verified == "true")
 ```
 
-#### F - Filter by Value
+#### Filter by Value
 
 In the following example, John wants to select the reviews provided through the Android channel with value greater or equal to 3 between 01/01/2020 00:00 and 20/01/2020 00:00.
 

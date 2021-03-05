@@ -18,8 +18,7 @@ The **Mosaic** visualization displays data from two or more qualitative variable
 Select the **Mosaic** option from the visualization dropdown in the upper left.
 
 ## Mosaic behavior
-The mosaic visualization displays string values in a graph.
-
+The mosaic visualization allows you to view state changes in your time series data visually.
 
 ## Mosaic controls
 To view **Mosaic** controls, click **{{< icon "gear" >}} Customize** next to the visualization dropdown.
@@ -56,12 +55,7 @@ To view **Mosaic** controls, click **{{< icon "gear" >}} Customize** next to the
 ###### Y Axis
 - **Y Axis Label**: Enter a label for the y-axis.
 - **Y Label Separator**: If there's more than one column on the y-axis, enter a delimiter to separate the label, such as a comma or space. If there's no separator specified, the labels are a continuous string of all y columns.
-- **Generate Y-Axis Tick Marks**: Select the method to generate y-axis tick marks:
-  - **Auto**: Select to automatically generate tick marks.
-  - **Custom**: To customize the number of y-axis tick marks, select this option, and then enter  the following:
-    - **Total Tick Marks**: Enter the total number of ticks to display.
-    - **Start Tick Marks At**: Enter the value to start ticks at.
-    - **Tick Mark Interval**: Enter the interval in between each tick.
+- **Y Labels**: If there's more than one column on the y-axis, select which of the columns should be part of the label. 
 
 ###### Legend
 - **Legend Orientation**: Select the orientation of the legend that appears upon hover:

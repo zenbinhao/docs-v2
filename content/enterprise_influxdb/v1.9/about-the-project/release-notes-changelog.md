@@ -24,6 +24,7 @@ in that there is no corresponding InfluxDB OSS release.
 - Support authorization for Kapacitor via LDAP.
 - Support for [configuring Flux query resource usage](/enterprise_influxdb/v1.9/administration/config-data-nodes/#flux-controller) (concurrency, memory, etc.).
 - Upgrade to [Flux v0.113.0](/influxdb/cloud/reference/release-notes/flux/#v01130-2021-04-21).
+- Add HyperLogLog operator to InfluxQL to allow computing count-distinct approximately.
 
 ### Bug fixes
 - `show databases` now checks read and write permissions.

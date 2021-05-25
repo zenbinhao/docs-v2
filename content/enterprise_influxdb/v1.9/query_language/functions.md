@@ -15,6 +15,7 @@ Aggregate, select, transform, and predict data with InfluxQL functions.
 
 * [Aggregations](#aggregations)
   * [COUNT()](#count)
+  * [COUNT_HLL()](#count-hll)
   * [DISTINCT()](#distinct)
   * [INTEGRAL()](#integral)
   * [MEAN()](#mean)
@@ -23,6 +24,7 @@ Aggregate, select, transform, and predict data with InfluxQL functions.
   * [SPREAD()](#spread)
   * [STDDEV()](#stddev)
   * [SUM()](#sum)
+  * [SUM()_HLL](#sum-hll)
 * [Selectors](#selectors)
   * [BOTTOM()](#bottom)
   * [FIRST()](#first)
@@ -219,6 +221,7 @@ time                   count
 2015-09-18T21:48:00Z   800000
 ```
 
+### COUNT_HLL()
 ### DISTINCT()
 
 Returns the list of unique [field values](/enterprise_influxdb/v1.9/concepts/glossary/#field-value).
@@ -955,6 +958,7 @@ time                   sum
 The query returns the summed total of the field values in the `water_level` field key.
 It covers the [time range](/enterprise_influxdb/v1.9/query_language/explore-data/#time-syntax) between `2015-08-17T23:48:00Z` and `2015-08-18T00:54:00Z` and [groups](/enterprise_influxdb/v1.9/query_language/explore-data/#the-group-by-clause) results into 12-minute time intervals and per tag. The query [fills](/enterprise_influxdb/v1.9/query_language/explore-data/#group-by-time-intervals-and-fill) empty time intervals with 18000, and it [limits](/enterprise_influxdb/v1.9/query_language/explore-data/#the-limit-and-slimit-clauses) the number of points and series returned to four and one.
 
+### SUM_HLL()
 ## Selectors
 
 ### BOTTOM()

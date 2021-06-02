@@ -1,9 +1,9 @@
 ---
-title: Running Telegraf as a Windows service
+title: Run Telegraf as a Windows service
 description: How to configure Telegraf as a Windows service using PowerShell.
 menu:
   telegraf_1_18:
-    name: Running as Windows service
+    name: Run as Windows service
     weight: 20
     parent: Administration
 ---

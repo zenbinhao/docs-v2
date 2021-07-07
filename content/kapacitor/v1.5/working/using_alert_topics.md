@@ -19,7 +19,7 @@ This example will walk the reader through setting up a simple cpu threshold aler
 
 ### Requirements
 
-It is expected that the reader is already familiar the basics of Kapacitor
+Before you begin, we recommend that you become familiar with the basics of Kapacitor
 presented in the [Getting Started](/kapacitor/v1.5/introduction/getting-started/)
 guide. The reader should also have a basic understanding of working with tasks
 and [TICKscripts](/kapacitor/v1.5/tick/introduction/).

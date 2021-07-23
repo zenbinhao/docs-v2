@@ -32,10 +32,6 @@ index-version = "tsi1"
 
 - For detail on configuration, see [Configure InfluxDB Enterprise clusters](/enterprise_influxdb/v1.8/administration/configuration/).
 
-### InfluxDB OSS
-
-- For detail on configuration, see [Configuring InfluxDB OSS](/enterprise_influxdb/v1.9/administration/config/).
-
 ## Tooling
 
 ### `influx_inspect dumptsi`

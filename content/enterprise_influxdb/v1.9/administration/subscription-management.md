@@ -180,7 +180,7 @@ Below is an example `influxdb.conf` subscriber configuration:
   write-buffer-size = 1000
 ```
 
-_**Descriptions of `[subscriber]` configuration options are available in the [Configuring InfluxDB](/enterprise_influxdb/v1.9/administration/config#subscription-settings) documentation.**_
+_**Descriptions of `[subscriber]` configuration options are available in the [Configuring InfluxDB](/enterprise_influxdb/v1.9/administration/config-data-nodes/#subscriber-settings) documentation.**_
 
 ## Troubleshooting
 

@@ -403,6 +403,74 @@ To opt-out of sending telemetry data back to InfluxData, include the
 ```
 {{% /note %}}
 
+### Install InfluxDB as a Windows service
+
+{{% note %}}
+Installing a Windows service requires administrative permissions.
+To run PowerShell as an administrator,
+see "[Launch PowerShell as administrator](https://docs.microsoft.com/en-us/powershell/scripting/windows-powershell/starting-windows-powershell?view=powershell-7#with-administrative-privileges-run-as-administrator)".
+{{% /note %}}
+
+In PowerShell _as an administrator_, do the following:
+
+1. Use the following commands to download the Influxdb Windows binary
+   and extract its contents to `C:\Program Files\InfluxData\influxdb\`:
+   ```
+   > wget https://dl.influxdata.com/influxdb/releases/influxdb2-{{< latest-patch >}}-windows-amd64.zip -UseBasicParsing -OutFile influxdb2-{{< latest-patch >}}-windows-amd64.zip
+   > Expand-Archive .\influxdb2-{{< latest-patch >}}-windows-amd64.zip -DestinationPath 'C:\Program Files\InfluxData\influxdb\'
+   ```
+
+2. Move the `influx.exe` and `influxd.exe` files from
+   `C:\Program Files\InfluxData\influxdb\influxdb-{{< latest-patch >}}`
+   up a level to `C:\Program Files\InfluxData\influxdb`:
+   ```
+   > cd "C:\Program Files\InfluxData\influxdb"
+   > mv .\influx*.exe .
+   ```
+   Or create a [Windows symbolic link (Symlink)](https://blogs.windows.com/windowsdeveloper/2016/12/02/symlinks-windows-10/)
+   to point to this directory.
+
+   {{% note %}}
+The instructions below assume that either the `influx.exe` and `influxd.exe` files are stored in
+`C:\Program Files\InfluxData\influxdb`, or you've created a Symlink to point to this directory.
+   {{% /note %}}
+
+3. Install Influxdb as a service:
+   ```powershell
+   > .\influxd.exe --service install --config "C:\Program Files\InfluxData\influxdb\influxd"
+   ```
+   Make sure to provide the absolute path of the `influxdb.conf` configuration file,
+   otherwise the Windows service may fail to start.
+3. To test that the installation works, run:
+
+   ```powershell
+   > C:\"Program Files"\InfluxData\influxdb\influxd.exe --config C:\"Program Files"\InfluxData\influxdb\influxdb.conf --test
+   ```
+
+4. To start the server, run:
+
+   ```powershell
+   influxd.exe --service start
+   ```
+
+<!--
+## Logging and troubleshooting
+
+When Influxdb runs as a Windows service, Influxdb logs messages to Windows event logs.
+If the Influxdb service fails to start, view error logs by selecting **Event Viewer**→**Windows Logs**→**Application**.
+-->
+
+## Windows service commands
+
+The following commands are available:
+
+| Command                            | Effect                        |
+|------------------------------------|-------------------------------|
+| `influxdb.exe --service install`   | Install influxdb as a service |
+| `influxdb.exe --service uninstall` | Remove the influxdb service   |
+| `influxdb.exe --service start`     | Start the influxdb service    |
+| `influxdb.exe --service stop`      | Stop the influxdb service     |
+
 {{% /tab-content %}}
 <!-------------------------------- END Windows -------------------------------->
 

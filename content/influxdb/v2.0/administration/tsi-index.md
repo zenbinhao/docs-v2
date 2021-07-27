@@ -1,7 +1,7 @@
 ---
 title: Manage TSI index
-seotitle: Administration in InfluxDB
-description: Administer InfluxDB using the InfluxDB UI or the influx CLI.
+seotitle: Manage TSI index in InfluxDB
+description: 
 menu:
   influxdb_2_0:
     parent: Administration
@@ -11,7 +11,21 @@ influxdb/v2.0/tags: [administration]
 
 
 ## Manage TSI index
-## Rebuild the TSI index and series file
-## Export TSI index data
-## Report the cardinality of TSI files
-## Output low level TSI information
+### Rebuild the TSI index and series file
+### Export TSI index data
+
+influxd inspect export-index -h
+
+This command will export all series in a TSI index to
+SQL format for easier inspection and debugging.
+
+Usage:
+  influxd inspect export-index [flags]
+
+Flags:
+  -h, --help                 help for export-index
+      --index-path string    Path to the index directory of the data engine
+      --series-path string   Path to series file
+
+### Report the cardinality of TSI files
+### Output low level TSI information

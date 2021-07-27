@@ -1,7 +1,7 @@
 ---
 title: Manage TSM Data
-seotitle: Administration in InfluxDB
-description: Administer InfluxDB using the InfluxDB UI or the influx CLI.
+seotitle: Manage TSM in InfluxDB
+description: 
 menu:
   influxdb_2_0:
     parent: Administration
@@ -10,8 +10,8 @@ influxdb/v2.0/tags: [administration]
 ---
 
 ## Manage TSM data
-## Run TSM report
-## Check the consistency of TSM files
-## Output TSM data from WAL files
-## Export block data
-## Check for corrupt WAL files
+### Run TSM report
+### Check the consistency of TSM files
+### Output TSM data from WAL files
+### Export block data
+### Check for corrupt WAL files

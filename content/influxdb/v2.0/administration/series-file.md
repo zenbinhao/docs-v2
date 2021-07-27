@@ -9,6 +9,10 @@ weight: 100
 influxdb/v2.0/tags: [administration]
 ---
 
-## Manage the series file
-### Compact the series file
-### Verify the integrity of the series file
+<!-- ## compact the series file -->
+
+## Verify the integrity of the series file
+
+file Verifies the integrity of series files.
+
+`influxd inspect verify-series`

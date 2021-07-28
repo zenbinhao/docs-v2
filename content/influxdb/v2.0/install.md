@@ -487,6 +487,41 @@ docker run -p 8086:8086 influxdb:{{< latest-patch >}} --reporting-disabled
 ```
 {{% /note %}}
 
+### Use Docker Compose
+
+1. Create the following file at `influxdb-compose-example/docker-compose.yaml`:
+   ```yaml
+   version: '3'
+   services:
+     influxdb:
+       image: influxdb:latest
+       volumes:
+         - influxdbv2:/.influxdbv2
+         - ./ssl/influxdb-selfsigned.crt:/etc/ssl/influxdb-selfsigned.crt
+         - ./ssl/influxdb-selfsigned.key:/etc/ssl/influxdb-selfsigned.key
+       environment: 
+         - DOCKER_INFLUXDB_INIT_MODE=setup
+         - DOCKER_INFLUXDB_INIT_USERNAME=<username>
+         - DOCKER_INFLUXDB_INIT_PASSWORD=<password>
+         - DOCKER_INFLUXDB_INIT_ORG=<organization>
+         - DOCKER_INFLUXDB_INIT_BUCKET=<bucket>
+         - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=<token>
+         - INFLUXD_TLS_CERT=/etc/ssl/influxdb-selfsigned.crt
+         - INFLUXD_TLS_KEY=/etc/ssl/influxdb-selfsigned.key
+       ports:
+         - "8086:8086"
+   volumes:
+     influxdbv2:
+   ```
+2. Change to the example directory:
+   ```sh
+   cd influxdb-compose-example
+   ```
+3. Start the example:
+   ```sh
+   docker-compose up
+   ```
+
 {{% /tab-content %}}
 <!--------------------------------- END Docker -------------------------------->
 

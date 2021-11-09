@@ -28,7 +28,8 @@ for using Telegraf with InfluxDB v2.1._
 
 ## Create a Telegraf configuration
 
-1. Open the InfluxDB UI _(default: [localhost:8086](http://localhost:8086))_.
+{{% oss-only %}}1. Open the InfluxDB UI _(default: [localhost:8086](http://localhost:8086))_.{{% /oss-only %}} 
+{{% cloud-only %}}1. Open the InfluxDB Cloud UI.{{% /cloud-only %}}
 2. In the navigation menu on the left, select **Load Data** > **Telegraf**.
 
     {{< nav-icon "load data" >}}

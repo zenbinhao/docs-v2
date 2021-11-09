@@ -21,9 +21,9 @@ Use **InfluxDB OSS** sample datasets to quickly access data that lets you explor
 Each execution of `sample.data()` downloads the specified dataset from **Amazon S3**.
 If using [InfluxDB Cloud](/influxdb/cloud/) or a hosted InfluxDB OSS instance,
 you may see additional network bandwidth costs when using this function.
-Approximate sample dataset sizes are listed for each [sample dataset](/influxdb/2.0/reference/sample-data/#sample-datasets) and in the output of [`sample.list()`](/influxdb/v2.0/reference/flux/stdlib/influxdb-sample/list/). 
+Approximate sample dataset sizes are listed for each [sample dataset](/influxdb/2.0/reference/sample-data/#sample-datasets) and in the output of [`sample.list()`](/influxdb/v2.0/reference/flux/stdlib/influxdb-sample/list/).
 
-If you also want to explore Cloud, we offer a way to explore data without incurring network bandwidth costs, using [demo data](/influxdb/cloud/query-data/execute-queries/query-demo-data/).
+<!-- If you also want to explore Cloud, we offer a way to explore data without incurring network bandwidth costs, using [demo data](/influxdb/cloud/query-data/execute-queries/query-demo-data/). < -->
 {{% /note %}}
 
 ## Choose sample data

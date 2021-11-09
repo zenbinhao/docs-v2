@@ -1,7 +1,7 @@
 ---
 title: Get started with InfluxDB Cloud
 description: >
-  Get started with InfluxDB Cloud by querying and visualizing demo data in InfluxDB notebooks.
+  Get started with InfluxDB Cloud by querying and visualizing sample data in InfluxDB notebooks.
 menu:
   influxdb_cloud:
     name: Get started
@@ -13,19 +13,13 @@ influxdb/cloud/tags: [get-started, install]
 
 After you've [signed up for InfluxDB Cloud](/influxdb/cloud/sign-up/), you're ready to get started:
 
-1. Do one of the following:
-   - Add [sample data](#add-sample-data).
-   - [Use your own data](/influxdb/cloud/write-data/) to explore InfluxDB Cloud.
-2. [Create a notebook](#create-a-notebook):
-    1.  Clicking **Notebooks** in the navigation menu on the left.
-
-        {{< nav-icon "books" >}}
-
-    2. [Select metrics](#select-metrics)
-    3. [Visualize data](#visualize-data)
-    4. (Optional) [Process data](#process-data)
-    5. (Optional) [Monitor data](#monitor-data)
-    6. (Optional) [Output to a new bucket and export as a task](#output-to-a-new-bucket-and-export-as-a-task)
+1. Add [sample data](#add-sample-data).
+2. [Create a notebook](#create-a-notebook), and include the following in the notebook as applicable:
+    - [Select metrics](#select-metrics)
+    - [Visualize data](#visualize-data)
+    - (Optional) [Process data](#process-data)
+    - (Optional) [Monitor data](#monitor-data)
+    - (Optional) [Output to a new bucket and export as a task](#output-to-a-new-bucket-and-export-as-a-task)
 
 <!-- >
 ## Add demo data
@@ -148,3 +142,6 @@ After processing, send the downsampled data to a new bucket to store and view it
 4. Click **Run** from the **Preview** dropdown list to run the notebook and write to the output bucket a single time.
 5. To write continuously, click **Export as Task** in the upper right corner of the **Output to Bucket** cell. For details about working with tasks, see [Manage tasks](/influxdb/cloud/process-data/manage-tasks/).
 
+## Next steps
+
+   - [Use your own data](/influxdb/cloud/write-data/) to explore InfluxDB Cloud.

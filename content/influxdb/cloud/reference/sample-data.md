@@ -10,9 +10,9 @@ menu: influxdb_cloud_ref
 weight: 7
 ---
 
-Use **demo data** and **sample data** to familiarize yourself with time series data and InfluxDB Cloud.
-InfluxDB Cloud lets you access **Demo data buckets** and **Sample datasets** that contain time
-series data without having to write data to InfluxDB. 
+Use **sample data** to familiarize yourself with time series data and InfluxDB Cloud.
+InfluxDB Cloud lets you access **Sample datasets** that contain time
+series data without having to write data to InfluxDB.
 Sample datasets are also available for download and can be written to InfluxDB
 or loaded at query time.
 
@@ -23,7 +23,6 @@ If writing a static sample dataset to a bucket with a limited retention period, 
 {{% /note %}}
 
 - [Sample datasets](#sample-datasets)
-- [InfluxDB Cloud demo data](#influxdb-cloud-demo-data)
 
 ## Sample datasets
 
@@ -200,6 +199,7 @@ sample.data(set: "noaa")
   |> to(bucket: "noaa"  )
  ```
 
+<!-- >
 ## InfluxDB Cloud demo data
 Use [InfluxDB Cloud demo data buckets](/influxdb/cloud/reference/sample-data/#influxdb-cloud-demo-data) for quick,
 free access to different time series datasets.
@@ -209,3 +209,5 @@ free access to different time series datasets.
 {{% note %}}
 Demo data is not available for use with third-party integrations such as Grafana.
 {{% /note %}}
+
+< -->

@@ -23,7 +23,7 @@ Learn how to create a notebook that normalizes data. Walk through the following 
 ## Normalize data with a notebook
 1. Create a new notebook (see [Create a notebook](/influxdb/v2.1/notebooks/create-notebook/)).
 2. Add a **Metric Selector** cell to select a bucket to query data from:
-  - In the **Choose a bucket** dropdown, select your NOAA bucket.
+  - In the **FROM** panel, select  or search for your NOAA bucket.
   - Select the **h2o_temperature** field.
   - Select the **mean** function from the aggregate selector in the upper-right.
 3. Add a **Flux Transformation** cell with the following script to bring in data from the previous cell and normalize it:

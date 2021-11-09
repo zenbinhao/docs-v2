@@ -17,7 +17,6 @@ Learn how to create a notebook that downsamples data—walk through the followin
 - Downsamples data by aggregating data within windows of time with a Flux script
 - Outputs downsampled data to a bucket
 
-{{< youtube 0lS7n47kZog >}}
 
 ## Requirements
 
@@ -27,8 +26,7 @@ Learn how to create a notebook that downsamples data—walk through the followin
 ## Downsample data with a notebook
 
 1. Create a new notebook (see [Create a notebook](/influxdb/cloud/notebooks/create-notebook/)).
-2. Add a **Metric Selector** cell to select a bucket to query data from:
-   - In the **Choose a bucket** dropdown list, select **Website Monitoring Bucket**.
+2. In the **FROM** panel, select  or search for **Website Monitoring Bucket**.
    - Select the **response_time** field.
    - Select the **mean** function from the aggregate selector in the upper-right.
 3. Add a **Downsample** cell to bring in data from the previous cell and downsample it.

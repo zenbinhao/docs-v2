@@ -16,7 +16,7 @@ After you've [signed up for InfluxDB Cloud](/influxdb/cloud/sign-up/), you're re
 1. Add [sample data](#add-sample-data).
 2. [Create a notebook](#create-a-notebook).
 3. [Write your own data](/influxdb/cloud/write-data/) into InfluxDB Cloud.
-4. [Next steps](#next-steps)
+4. [Find next steps](#next-steps).
 
 <!-- >
 ## Add demo data
@@ -40,9 +40,9 @@ The examples below use the [NOAA NDBC sample data](/influxdb/v2.0/reference/samp
 
 Use [sample data](/influxdb/cloud/reference/sample-data/) to quickly populate InfluxDB with sample time series data. Sample data sets delivered with Cloud are used throughout this documentation site to provide context, best practices, and clear examples for how InfluxDB Cloud features and functions work.
 
-1. Click **Data > Bucket** and click **Create Bucket** to create a bucket and name it **noaa**.
-2. Do one of the following to download sample data: 
-   - [Install community templates](#add-sample-data-with-community-templates) 
+1. Click **Load Data > Buckets** and click **{{< caps >}}Create Bucket{{< /caps >}}** to create a bucket and name it **noaa**.
+2. Do one of the following to download sample data:
+   - [Install community templates](#add-sample-data-with-community-templates)
    - [Write sample data with an InfluxDB task](#write-sample-data-with-an-influxdb-task)
 
 ### Add sample data with community templates
@@ -88,14 +88,14 @@ Now that we've added the sample data bucket, we're ready to create our notebook:
 4. (Optional) [Monitor data](#monitor-data)
 5. (Optional) [Output to a new bucket and export as a task](#output-to-a-new-bucket-and-export-as-a-task)
 
-Notebooks can build and annotate processes and data flows for your time series data, including writing to, querying from, and visualizing your data. For more information, see [Notebooks](/influxdb/cloud/notebooks/).
+Notebooks can build and annotate processes and data flows for your time series data. For more information, see [notebooks](/influxdb/cloud/notebooks/).
 
 ### Select metrics
 
 1. In the navigation menu on the left, click **Notebooks**.
 
     {{< nav-icon "notebooks" >}}
-2. Click **+New Notebook**. By default, a **Metric Selector** and **Visualization** cell appear. For an overview of cell types, see [Overview of notebooks](/influxdb/cloud/notebooks/overview/#notebook-cell-types). 
+2. Click **+New Notebook**. By default, a **Metric Selector** and **Visualization** cell appear. For an overview of cell types, see [Overview of notebooks](/influxdb/cloud/notebooks/overview/#notebook-cell-types).
 3. Enter a name for your notebook in the **Name this notebook** field. 
 5. In the **Metric Selector** cell, click the **Select a bucket** dropdown and chooose the bucket you want to explore data from. A list of measurements, fields, and tags from the bucket appear.
 6. Select a column value to analyze.
@@ -105,7 +105,7 @@ Notebooks can build and annotate processes and data flows for your time series d
 
 Next, we'll make it easier to visualize the raw data by viewing it in a graph. For more information on how to visualize data, see [here](/influxdb/cloud/visualize-data/).
 
-By default, a visualization cell appears below your initial metric selector cell showing the mean values on a graph. 
+By default, a visualization cell appears below your initial metric selector cell showing the mean values on a graph.
 
 1. Use the function dropdown menu to view different functions to apply to your data. By default, the visualization is set to the mean function.
 2. Use the visualization type dropdown to view different visualization types available.
@@ -149,11 +149,13 @@ After processing, send the downsampled data to a new bucket to store and view it
 
 ## Next steps
 
-After you have ingested data into InfluxDB Cloud, explore next steps in InfluxDB Cloud:
+After you have data in InfluxDB Cloud, discover what you want to do next:
 
-- [Query data](/influxdb/cloud/query-data/)
-- [Process data](/influxdb/cloud/process-data/)
-- [Visualize data](/influxdb/cloud/visualize-data/)
-- [Monitor and alert](/influxdb/cloud/monitor-alert/)
+- **Explore, update, and monitor data**:
+  - [Query data](/influxdb/cloud/query-data/)
+  - [Process data](/influxdb/cloud/process-data/)
+  - [Visualize data](/influxdb/cloud/visualize-data/)
+  - [Monitor and alert](/influxdb/cloud/monitor-alert/)
 
-Also, find common [tools and integrations](/influxdb/cloud/tools/) to use with InfluxDB Cloud, and learn how to [develop with the InfluxDB API](/influxdb/cloud/api-guide/).
+- **Use common** [tools and integrations](/influxdb/cloud/tools/)
+- **Learn how to** [develop with the InfluxDB API](/influxdb/cloud/api-guide/)

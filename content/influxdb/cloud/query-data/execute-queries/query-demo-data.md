@@ -1,5 +1,5 @@
----
-title: Query demo data 
+<!--->
+title: Query demo data
 description: >
   Explore InfluxDB Cloud with our demo data buckets. 
 menu:
@@ -64,3 +64,5 @@ After adding a demo data bucket, view the pre-built dashboard specific to the de
 #### Other sample data sets
 See [Sample data](/influxdb/cloud/reference/sample-data) for more sample InfluxDB data sets.
 {{% /note %}}
+
+< -->

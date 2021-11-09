@@ -20,6 +20,8 @@ After you've [signed up for InfluxDB Cloud](/influxdb/cloud/sign-up/), you're re
     - (Optional) [Process data](#process-data)
     - (Optional) [Monitor data](#monitor-data)
     - (Optional) [Output to a new bucket and export as a task](#output-to-a-new-bucket-and-export-as-a-task)
+3. [Write your own data](/influxdb/cloud/write-data/) into InfluxDB Cloud.
+4. [Next steps](#next-steps)
 
 <!-- >
 ## Add demo data
@@ -144,4 +146,11 @@ After processing, send the downsampled data to a new bucket to store and view it
 
 ## Next steps
 
-   - [Use your own data](/influxdb/cloud/write-data/) to explore InfluxDB Cloud.
+After you have ingested data into InfluxDB Cloud, explore next steps in InfluxDB Cloud:
+
+- [Query data](/influxdb/cloud/query-data/)
+- [Process data](/influxdb/cloud/process-data/)
+- [Visualize data](/influxdb/cloud/visualize-data/)
+- [Monitor and alert](/influxdb/cloud/monitor-alert/)
+
+Also, find common [tools and integrations](/influxdb/cloud/tools/) to use with InfluxDB Cloud, and learn how to [develop with the InfluxDB API](/influxdb/cloud/api-guide/).

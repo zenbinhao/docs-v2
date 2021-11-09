@@ -28,8 +28,9 @@ for using Telegraf with InfluxDB v2.1._
 
 ## Create a Telegraf configuration
 
-{{% oss-only %}}1. Open the InfluxDB UI _(default: [localhost:8086](http://localhost:8086))_.{{% /oss-only %}} 
-{{% cloud-only %}}1. Open the InfluxDB Cloud UI.{{% /cloud-only %}}
+{{% oss-only %}}
+
+1. Open the InfluxDB UI _(default: [localhost:8086](http://localhost:8086))_.
 2. In the navigation menu on the left, select **Load Data** > **Telegraf**.
 
     {{< nav-icon "load data" >}}
@@ -45,6 +46,27 @@ for using Telegraf with InfluxDB v2.1._
 Once confirmed, a **{{< caps >}}Connection Found!{{< /caps >}}** message appears.
 12. Click **{{< caps >}}Finish{{< /caps >}}**. Your Telegraf configuration name and the associated bucket name appear in the list of Telegraf configurations.
 
+{{% /oss-only %}}
+
+{{% cloud-only %}}
+
+1. Open the InfluxDB Cloud UI.
+2. In the navigation menu on the left, select **Load Data** > **Telegraf**.
+
+    {{< nav-icon "load data" >}}
+
+4. Click **{{< icon "plus" >}} {{< caps >}}Create Configuration{{< /caps >}}**.
+5. In the **Bucket** dropdown, select the bucket where Telegraf will store collected data.
+6. Select one of the available plugins and click **{{< caps >}}Continue Configuring{{< /caps >}}**.
+8. Provide a **Configuration Name** and an optional **Configuration Description**.
+9. Click **{{< caps >}}Save and test{{< /caps >}}**.
+10. The **Test Your Configuration** page provides instructions for how to start Telegraf using the generated configuration.
+   _See [Start Telegraf](#start-telegraf) below for detailed information about what each step does._
+11. Once Telegraf is running, click **{{< caps >}}Listen for Data{{< /caps >}}** to confirm Telegraf is successfully sending data to InfluxDB.
+Once confirmed, a **{{< caps >}}Connection Found!{{< /caps >}}** message appears.
+12. Click **{{< caps >}}Finish{{< /caps >}}**. Your Telegraf configuration name and the associated bucket name appear in the list of Telegraf configurations.
+
+{{% /cloud-only %}}
 
 ### Windows
 
@@ -128,5 +150,7 @@ telegraf -config http://localhost:8086/api/v2/telegrafs/0xoX00oOx0xoX00o
 
 ## Manage Telegraf configurations
 
-For more information about managing Telegraf configurations in InfluxDB, see
-[Telegraf configurations](/influxdb/v2.1/telegraf-configs/).
+{{% oss-only %}}For more information about managing Telegraf configurations in InfluxDB, see
+[Telegraf configurations](/influxdb/v2.1/telegraf-configs/).{{% oss-only %}}
+{{% cloud-only %}}For more information about managing Telegraf configurations in InfluxDB, see
+[Telegraf configurations](/influxdb/cloud/telegraf-configs/).{{% /cloud-only %}}

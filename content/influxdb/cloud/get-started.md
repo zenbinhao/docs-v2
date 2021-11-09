@@ -14,12 +14,7 @@ influxdb/cloud/tags: [get-started, install]
 After you've [signed up for InfluxDB Cloud](/influxdb/cloud/sign-up/), you're ready to get started:
 
 1. Add [sample data](#add-sample-data).
-2. [Create a notebook](#create-a-notebook), and include the following in the notebook as applicable:
-    - [Select metrics](#select-metrics)
-    - [Visualize data](#visualize-data)
-    - (Optional) [Process data](#process-data)
-    - (Optional) [Monitor data](#monitor-data)
-    - (Optional) [Output to a new bucket and export as a task](#output-to-a-new-bucket-and-export-as-a-task)
+2. [Create a notebook](#create-a-notebook).
 3. [Write your own data](/influxdb/cloud/write-data/) into InfluxDB Cloud.
 4. [Next steps](#next-steps)
 
@@ -50,7 +45,7 @@ Use [sample data](/influxdb/cloud/reference/sample-data/) to quickly populate In
    - [Install community templates](#add-sample-data-with-community-templates) 
    - [Write sample data with an InfluxDB task](#write-sample-data-with-an-influxdb-task)
 
-### Add sample data with community templates 
+### Add sample data with community templates
 
 1. Visit the **InfluxDB templates page** in the InfluxDB Cloud UI. Click **Settings** > **Templates** in the navigation menu on the left.
 
@@ -85,7 +80,15 @@ For more information about this and other InfluxDB sample datasets, see [InfluxD
 
 ## Create a notebook
 
-Now that we've added the sample data bucket, we're ready to create our notebook. Notebooks can build and annotate processes and data flows for your time series data, including writing to, querying from, and visualizing your data. For more information, see [Notebooks](/influxdb/cloud/notebooks/). 
+Now that we've added the sample data bucket, we're ready to create our notebook:
+
+1. [Select metrics](#select-metrics) to ingest into the notebook
+2. [Visualize data](#visualize-data)
+3. (Optional) [Process data](#process-data)
+4. (Optional) [Monitor data](#monitor-data)
+5. (Optional) [Output to a new bucket and export as a task](#output-to-a-new-bucket-and-export-as-a-task)
+
+Notebooks can build and annotate processes and data flows for your time series data, including writing to, querying from, and visualizing your data. For more information, see [Notebooks](/influxdb/cloud/notebooks/).
 
 ### Select metrics
 
@@ -122,7 +125,7 @@ For more information on how to process data, see [here](/influxdb/cloud/process-
 
 ### Monitor data
 
-Get notifications every time your data crosses a threshold. Specify your alerts by time and decide how the information will be sent to you. 
+Get notifications every time your data crosses a threshold. Specify your alerts by time and decide how the information will be sent to you.
 
 1. In your notebook, click **{{< icon "plus" >}}** to add a cell, then select **Output > Alert**.
 2. Customize the conditions to send an alert.
@@ -132,7 +135,7 @@ Get notifications every time your data crosses a threshold. Specify your alerts 
    - HTTP post
    - Pager Duty
 5. (Optional) Personalize your message. By default, the message is “${strings.title(v: r._type)} for ${r._source_measurement} triggered at ${time(v: r._source_timestamp)}!”
-6. Click **Export as Alert Task** to save your alarm. 
+6. Click **Export as Alert Task** to save your alarm.
 
 ### Output to a new bucket and export as a task
 

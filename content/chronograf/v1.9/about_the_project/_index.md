@@ -6,7 +6,7 @@ menu:
     name: About the project
     weight: 10
 ---
-Chronograf is the user interface component of the [InfluxData time series platform](https://www.influxdata.com/time-series-platform/). It makes the monitoring and alerting for your infrastructure easy to setup and maintain. It is simple to use and includes templates and libraries to allow you to rapidly build dashboards with realtime visualizations of your data.
+Chronograf is the user interface component of the [InfluxData time series platform](https://www.influxdata.com/time-series-platform/). It makes the monitoring and alerting for your infrastructure easy to setup and maintain. It is simple to use and includes templates and libraries lets you rapidly build dashboards with realtime visualizations of your data.
 
 Follow the links below for more information.
 

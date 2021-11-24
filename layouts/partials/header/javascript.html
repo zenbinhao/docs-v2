@@ -7,3 +7,24 @@
 <script type="text/javascript" src="{{ $headerjs.RelPermalink }}" ></script>
 <script type="text/javascript">set_style_from_cookie();</script>
 <script type="text/javascript">set_sidebar_state();</script>
+<script type="text/javascript" src="https://static.cloud.coveo.com/searchui/v2.7610/js/CoveoJsSearch.Lazy.min.js"></script>
+<script type="text/javascript" src="https://static.cloud.coveo.com/searchui/v2.7610/js/templates/templates.js"></script>
+<script type="text/javascript">
+  document.addEventListener("DOMContentLoaded", () => {
+    const searchBoxRoot = document.getElementById("searchbox");
+    Coveo.SearchEndpoint.configureCloudV2Endpoint(
+      "ORGNESS",
+      "KEYNESS",
+      "https://platform.cloud.coveo.com/rest/search",
+      {
+        "queryStringArguments": {
+          "searchHub": "community"
+        }
+      }
+    );
+    Coveo.initSearchbox(
+      searchBoxRoot,
+      "coveo.html"
+    );
+  });
+</script>

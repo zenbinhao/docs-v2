@@ -8,16 +8,16 @@
   &--search {
     position: relative;
     flex-grow: 1;
-    &:after {
-      content: "\e905";
-      display: block;
-      font-family: 'icomoon-v2';
-      position: absolute;
-      top: .15rem;
-      right: .25rem;
-      color: $article-text;
-      font-size: 1.75rem;
-    }
+    // &:after {
+    //   content: "\e905";
+    //   display: block;
+    //   font-family: 'icomoon-v2';
+    //   position: absolute;
+    //   top: .15rem;
+    //   right: .25rem;
+    //   color: $article-text;
+    //   font-size: 1.75rem;
+    // }
 
     input {
       font-family: $rubik;

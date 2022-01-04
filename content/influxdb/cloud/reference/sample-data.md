@@ -21,11 +21,13 @@ If writing a static sample dataset to a bucket with a limited retention period, 
 
 ## Sample datasets
 
-Do one of the following: 
+Do one of the following:
 
-- Run the sample data query in the **Script Editor** found in **Explore** from the left-hand navigation bar: 
+- Run the sample data query in the **Script Editor** found in **Explore** from the left-hand navigation bar:
     - [Air sensor sample data](#air-sensor-sample-data)
     - [Bird migration sample data](#bird-migration-sample-data)
+    - [Bitcoin sample data](#bitcoin-sample-data)
+    - [Machine production sample data](#machine-production-sample-data)
     - [NOAA sample data](#noaa-sample-data)
       - [NOAA NDBC data](#noaa-ndbc-data)
       - [NOAA water sample data](#noaa-water-sample-data)
@@ -80,6 +82,26 @@ sample.data(set: "birdMigration")
 
 The bird migration sample dataset is used in the [Work with geo-temporal data](/influxdb/cloud/query-data/flux/geo/)
 guide to demonstrate how to query and analyze geo-temporal data.
+
+### Bitcoin sample data
+
+Bitcoin price data from the past 30 days is powered by [CoinDesk](https://www.coindesk.com/price/bitcoin/) and is updated approximately every 15m.
+
+```js
+import "influxdata/influxdb/sample"
+
+sample.data(set: "bitcoin")
+```
+
+### Machine production sample data
+
+States and metrics reported from four automated grinding wheel stations on a production line. Contains data from 2021-08-01T00:00:00Z to 2021-08-01T23:59:59Z.
+
+```js
+import "influxdata/influxdb/sample"
+
+sample.data(set: "machineProduction")
+```
 
 ### NOAA sample data
 
@@ -179,7 +201,7 @@ sample.data(set: "usgs")
 ```
 
 ### Write sample data with an InfluxDB task
-   
+
 Use the [Flux InfluxDB sample package](/{{< latest "flux" >}}/stdlib/influxdata/influxdb/sample/) to download and write sample data to InfluxDB.
 
 Add the following as an [InfluxDB task](/influxdb/cloud/process-data/manage-tasks/create-task/).

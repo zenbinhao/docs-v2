@@ -11,12 +11,11 @@ related:
   - /influxdb/v2.1/monitor-alert/checks/
 ---
 
-Send an alert email using a third-party service, such as [SendGrid](https://sendgrid.com/), [Amazon Simple Email Service (SES)](https://aws.amazon.com/ses/), [Mailjet](https://www.mailjet.com/), or [Mailgun](https://www.mailgun.com/). To send an alert email, complete the following steps:
+Send an alert email using a third-party service, such as [SendGrid](https://sendgrid.com/), [Mailjet](https://www.mailjet.com/), or [Mailgun](https://www.mailgun.com/). To send an alert email, complete the following steps:
 
 1. [Create a check](/influxdb/v2.1/monitor-alert/checks/create/#create-a-check-in-the-influxdb-ui) to identify the data to monitor and the status to alert on.
 2. Set up your preferred email service (sign up, retrieve API credentials, and send test email):
    - **SendGrid**: See [Getting Started With the SendGrid API](https://sendgrid.com/docs/API_Reference/api_getting_started.html)
-   - **AWS Simple Email Service (SES)**: See [Using the Amazon SES API](https://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-email.html). Your AWS SES request, including the `url` (endpoint), authentication, and the structure of the request may vary. For more information, see [Amazon SES API requests](https://docs.aws.amazon.com/ses/latest/DeveloperGuide/using-ses-api-requests.html) and [Authenticating requests to the Amazon SES API](https://docs.aws.amazon.com/ses/latest/DeveloperGuide/using-ses-api-authentication.html).
    - **Mailjet**: See [Getting Started with Mailjet](https://dev.mailjet.com/email/guides/getting-started/)
    - **Mailgun**: See [Mailgun Signup](https://signup.mailgun.com/new/signup)
 3. [Create an alert email task](#create-an-alert-email-task) to call your email service and send an alert email.
@@ -52,7 +51,6 @@ Send an alert email using a third-party service, such as [SendGrid](https://send
 {{< tabs-wrapper >}}
 {{% tabs %}}
 [SendGrid](#)
-[AWS SES](#)
 [Mailjet](#)
 [Mailgun](#)
 {{% /tabs %}}
@@ -113,68 +111,10 @@ numberOfCrits
 {{% /tab-content %}}
 
 <!-------------------------------- BEGIN AWS SES -------------------------------->
-{{% tab-content %}}
-
-The example below uses the AWS SES API v2 to send an alert email when more than 3 critical statuses occur since the last task run.
-
-{{% note %}}
-Your AWS SES request, including the `url` (endpoint), authentication, and the structure of the request may vary. For more information, see [Amazon SES API requests](https://docs.aws.amazon.com/ses/latest/DeveloperGuide/using-ses-api-requests.html) and [Authenticating requests to the Amazon SES API](https://docs.aws.amazon.com/ses/latest/DeveloperGuide/using-ses-api-authentication.html). We recommend signing your AWS API requests using the [Signature Version 4 signing process](https://docs.aws.amazon.com/general/latest/gr/signing_aws_api_requests.html).
-{{% /note %}}
-
-```js
-import "http"
-import "json"
-
-// Import the Secrets package if you store your API credentials as secrets.
-// For detail on how to do this, see Step 4 above.
-import "influxdata/influxdb/secrets"
-
-// Retrieve the secrets if applicable. Otherwise, skip this line
-// and add the API key as the Bearer token in the Authorization header.
-AWS_AUTH_ALGORITHM = secrets.get(key: "AWS_AUTH_ALGORITHM")
-AWS_CREDENTIAL = secrets.get(key: "AWS_CREDENTIAL")
-AWS_SIGNED_HEADERS = secrets.get(key: "AWS_SIGNED_HEADERS")
-AWS_CALCULATED_SIGNATURE = secrets.get(key: "AWS_CALCULATED_SIGNATURE")
-
-numberOfCrits = from(bucket: "_monitoring")
-	|> range(start: -task.every)
-	|> filter(fn: (r) => r.measurement == "statuses" and r._level == "crit")
-	|> count()
-
-numberOfCrits
-  |> map(fn: (r) => (if r._value > 3 then {
-      r with _value: http.post(
-        url: "https://email.your-aws-region.amazonaws.com/sendemail/v2/email/outbound-emails",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": "Bearer ${AWS_AUTH_ALGORITHM}${AWS_CREDENTIAL}${AWS_SIGNED_HEADERS}${AWS_CALCULATED_SIGNATURE}"
-        },
-        data: json.encode(v: {
-          "Content": {
-            "Simple": {
-              "Body": {
-                "Text": {
-                  "Charset": "UTF-8",
-                  "Data": "There have been ${r._value} critical statuses."
-                }
-              },
-              "Subject": {
-                "Charset": "UTF-8",
-                "Data": "InfluxDB critical alert"
-              }
-            }
-          },
-          "Destination": {
-            "ToAddresses": [
-              "john.doe@example.com"
-            ]
-          }
-        }))} else {r with _value: 0}))
-```
-
-For details on the request syntax, see [SendEmail API v2 reference](https://docs.aws.amazon.com/ses/latest/APIReference-V2/API_SendEmail.html).
-
-{{% /tab-content %}}
+<!--
+    We can't use AWS SES in InfluxDB UI because SES requires generating
+    signatures that depend on a hashing function, e.g. HMAC.
+-->
 
 <!-------------------------------- BEGIN Mailjet ------------------------------->
 {{% tab-content %}}

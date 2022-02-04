@@ -5,28 +5,28 @@
     advantage of common patterns in their language of choice and avoid writing boilerplate code.
     In this guide, you'll walk through the process of building a real application that manages IoT devices, writes data to InfluxDB, queries data from InfluxDB to create data visualizations, and monitors the health of devices and the application itself.
     You'll learn:
-    - the basics of InfluxDB
+    - the basics of InfluxDB and the REST API
     - how to install a client library
-    - how to use the InfluxDB API
     - how to write data to influxDB
     - how to query data
 1. Setup InfluxDB
    1. InfluxDB URL, Org, Bucket, All-Access Token
 1. Start with an API client (InfluxDB basics)
-   1. Install a client library
+   1. API basics
    2. Create an API token
    3. Create a bucket
-      1. Measurements, timeseries
+      1. Measurements, time series
       2. Measurement schemas (aka bucket schemas)
+   1. Install a client library
    4. Write data
       1. Line protocol
-   5. Query influxDB
+   5. Query InfluxDB
       1. Flux
    6. Aggregate and downsample your data
 1. Register an IoT device.
    ## Authorization and authentication in InfluxDB
    IoT devices generate measurement data....
-   To write timeseries measurements to InfluxDB, your application or device needs to be authorized.
+   To write time series measurements to InfluxDB, your application or device needs to be authorized.
    An InfluxDB **authorization** consists of a set of permissions and an API token.
    To authenticate InfluxDB API requests, the device passes the API token in the `Authorization` request header.
    1. IoT Dev Center app serves an API (/api/env/<deviceID>).
@@ -43,10 +43,10 @@
 2. Monitor the IoT app
 2. Tasks
 2. Dashboards
-3. Monitor
+3. Monitor IoT device data
 
 
-IoT Center SUMMARY.md
+IoT Center SUMMARY.md:
 - [Introduction](./introduction.md)
 
 - [IoT Center: overview](./iot-center.md)

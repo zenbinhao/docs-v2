@@ -23,18 +23,29 @@
    5. Query InfluxDB
       1. Flux
    6. Aggregate and downsample your data
+1. IoT Dev Center
+   1. Architecture
+      - IoT Dev Center serves a modern React UI and a server-side API (/api/env/<deviceID>).
+   2. Simulate devices
+      - In IoT Dev Center, you can register __virtual devices__ that simulate real IoT devices and demonstrate the IoT Dev Center app before advancing to physical devices and other clients.
 1. Register an IoT device.
-   ## Authorization and authentication in InfluxDB
+   - On "Device Registrations" load, ...
+     - If the device is registered, i.e. it has an authorization in InfluxDB, then IoT Dev Center API returns authorization and InfluxDB configuration properties as configuration details for the device.
+            [Example]
+   - On "Register", ...
+     - If the device is not registered, IoT Dev Center API sends a request to the
+        InfluxDB API `/api/v2/authorizations` endpoint to create an API token with the name `IoT Center: DEVICE_ID`. The new token will be used in future API requests and token management (e.g. expiration and rotation).
+     - IoT Dev Center app uses the `IoT Center: ` prefix to identify and list registered devices.
+   - On "Delete", ...
+   - On "Device Settings"
+     - Device configuration details are composed of your InfluxDB configuration and authorization details for the Device ID.
+  ## Authorization and authentication in InfluxDB
    IoT devices generate measurement data....
    To write time series measurements to InfluxDB, your application or device needs to be authorized.
    An InfluxDB **authorization** consists of a set of permissions and an API token.
    To authenticate InfluxDB API requests, the device passes the API token in the `Authorization` request header.
-   1. IoT Dev Center app serves an API (/api/env/<deviceID>).
-   2. If the device is registered, IoT Dev Center API returns device details.
-      If the device is not registered, IoT Dev Center API sends a request to the
-      InfluxDB API `/api/v2/authorizations` endpoint to create an authorization.
-   3. IoT Dev Center app stores the device configuration and the associated new token to be used in future API requests and token management (e.g. expiration and rotation).
-      - See the IoT Dev Center example
+2. Device dashboard
+
 1. Manage and secure tokens
    1. InfluxDB Cloud (token access restrictions)
 1. Collect IoT data

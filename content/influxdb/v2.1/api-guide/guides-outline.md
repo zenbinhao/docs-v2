@@ -30,18 +30,22 @@
 
 ## Authorization and authentication in InfluxDB
 
-     IoT devices generate measurement data....
-     To write time series measurements to InfluxDB, your application or device needs to be authorized.
-     An InfluxDB **authorization** consists of a set of permissions and an API token.
-     To authenticate InfluxDB API requests, the device passes the API token in the `Authorization` request header.
+IoT devices generate measurement data....
+To write time series measurements to InfluxDB, your application or device needs to be authorized.
+An InfluxDB **authorization** consists of a set of permissions and an API token.
+To authenticate InfluxDB API requests, the device passes the API token in the `Authorization` request header.
 
-See how to [create an authorization](/influxdb/v2.1/security/tokens/create-token/).
+- See how to [create an authorization](/influxdb/v2.1/security/tokens/create-token/).
+- See how to [use an authorization](/influxdb/v2.1/security/tokens/use-tokens/).
 
-### IoT Center: device registrations
+### IoT Center: device registration
 
-In "Device Registrations", the UI sends a request to the IoT Center API `/api/devices` endpoint. The IoT Center server app, in turn, sends a request to the InfluxDB `/api/v2/authorizations` endpoint to retrieve authorizations with the prefix `IoT Center: `.
+The **Device Registrations** page lists registered IoT devices
+and lets you create and delete InfluxDB API tokens for your devices.
+To list registered devices, the [DevicesPage](https://github.com/bonitoo-io/iot-center-v2/blob/3118c6576ad7bccf0b84b63f95350bdaa159324e/app/ui/src/pages/DevicesPage.tsx) UI component sends a request to the IoT Center API `/api/devices` endpoint.
+The IoT Center server app, in turn, sends a request to the InfluxDB `/api/v2/authorizations` endpoint to retrieve authorizations with the prefix `IoT Center: `.
 
-{{/* Source: /app/ui/src/pages/DevicesPage.ts */}}
+{{/* Source: https://github.com/bonitoo-io/iot-center-v2/blob/3118c6576ad7bccf0b84b63f95350bdaa159324e/app/ui/src/pages/DevicesPage.tsx */}}
 
 ```js
 // Source: github/iot-center-v2/app/server/influxdb/authorizations.js
@@ -77,52 +81,52 @@ async function getIoTAuthorizations() {
 
 ### IoT Center: register a device
 
-  - Click "Register" button.
-  - UI calls `/api/devices/DEVICE_ID`. Calls `/api/v2/authorizations` to find a matching authorization.
-  - If the device is not registered, IoT Dev Center API sends a request to the
-    InfluxDB API `/api/v2/authorizations` endpoint to create an API token with the name `IoT Center: DEVICE_ID`. IoT Dev Center app uses the `DESC_PREFIX` (`= "IoT Center: "`) constant variable to identify and retrieve registered devices. The IoT Center app will be responsible for expiring, rotating, and managing tokens. The IoT device will use the token to authenticate API requests to InfluxDB.
+- Click the "Register" button.
+- UI calls `/api/devices/DEVICE_ID`. Calls `/api/v2/authorizations` to find a matching authorization.
+- If the device is not registered, IoT Dev Center API sends a request to the
+  InfluxDB API `/api/v2/authorizations` endpoint to create an API token with the name `IoT Center: DEVICE_ID`. IoT Dev Center app uses the `DESC_PREFIX` (`= "IoT Center: "`) constant variable to identify and retrieve registered devices. The IoT Center app will be responsible for expiring, rotating, and managing tokens. The IoT device will use the token to authenticate API requests to InfluxDB.
 
-    #### Create an authorization
+#### Create an authorization
 
-    ```js
-    const {AuthorizationsAPI} = require('@influxdata/influxdb-client-apis')
-    const {getOrganization} = require('./organizations')
-    const {getBucket} = require('./buckets')
-    const authorizationsAPI = new AuthorizationsAPI(influxdb)
-    const DESC_PREFIX = 'IoT Center: '
-    const CREATE_BUCKET_SPECIFIC_AUTHORIZATIONS = false
+  ```js
+  const {AuthorizationsAPI} = require('@influxdata/influxdb-client-apis')
+  const {getOrganization} = require('./organizations')
+  const {getBucket} = require('./buckets')
+  const authorizationsAPI = new AuthorizationsAPI(influxdb)
+  const DESC_PREFIX = 'IoT Center: '
+  const CREATE_BUCKET_SPECIFIC_AUTHORIZATIONS = false
 
-    /**
-     * Creates authorization for a supplied deviceId
-     * @param {string} deviceId client identifier
-     * @return {import('@influxdata/influxdb-client-apis').Authorization} promise with authorization or an error
-     */
-    async function createIoTAuthorization(deviceId) {
-      const {id: orgID} = await getOrganization()
-      let bucketID = undefined
-      if (CREATE_BUCKET_SPECIFIC_AUTHORIZATIONS) {
-        bucketID = await getBucket(INFLUX_BUCKET).id
-      }
-      console.log(
-        `createIoTAuthorization: deviceId=${deviceId} orgID=${orgID} bucketID=${bucketID}`
-      )
-      return await authorizationsAPI.postAuthorizations({
-        body: {
-          orgID,
-          description: DESC_PREFIX + deviceId,
-          permissions: [
-            {
-              action: 'read',
-              resource: {type: 'buckets', id: bucketID, orgID},
-            },
-            {
-              action: 'write',
-              resource: {type: 'buckets', id: bucketID, orgID},
-            },
-          ],
-        },
-      })
+  /**
+   * Creates authorization for a supplied deviceId
+   * @param {string} deviceId client identifier
+   * @return {import('@influxdata/influxdb-client-apis').Authorization} promise with authorization or an error
+   */
+  async function createIoTAuthorization(deviceId) {
+    const {id: orgID} = await getOrganization()
+    let bucketID = undefined
+    if (CREATE_BUCKET_SPECIFIC_AUTHORIZATIONS) {
+      bucketID = await getBucket(INFLUX_BUCKET).id
     }
+    console.log(
+      `createIoTAuthorization: deviceId=${deviceId} orgID=${orgID} bucketID=${bucketID}`
+    )
+    return await authorizationsAPI.postAuthorizations({
+      body: {
+        orgID,
+        description: DESC_PREFIX + deviceId,
+        permissions: [
+          {
+            action: 'read',
+            resource: {type: 'buckets', id: bucketID, orgID},
+          },
+          {
+            action: 'write',
+            resource: {type: 'buckets', id: bucketID, orgID},
+          },
+        ],
+      },
+    })
+  }
         ```
 ### IoT Center: demo the virtual device
 
@@ -141,13 +145,19 @@ See [Write data with the API](/influxdb/v2.1/write-data/developer-tools/api/)
 
   IoT Center provides a "Write Missing Data" button that generates `environment` (temperature, humidity, pressure, CO2, TVOC, latitude, and longitude) [measurement]() data for the virtual device. The button generates measurements for every minute over the last seven days and writes the generated measurement data to the InfluxDB bucket you configured.
 
-  To write the measurements to the InfluxDB bucket, the IoT Center UI calls [`getWriteApi(org, bucket, precision, options)`]() to instantiate a point writer from the [influxdb-client-js]() Javascript client library.
+  To write the measurements to the InfluxDB bucket, the IoT Center UI calls [`getWriteApi(org, bucket, precision, options)`]() to instantiate a point writer from the [influxdb-client-js](https://github.com/influxdata/influxdb-client-js/) Javascript client library.
 
-  [`writeApi.writePoint(point)`]() adds each new point to an array in a `WriteBuffer` object.
+#### Batch writes with the InfluxDB API client library
 
-  [`writeApi.flush()`]() batches the points (to optimize network performance) and passes each batch in an HTTP POST request to the InfluxDB `/api/v2/write` endpoint.
+  [influxdb-client-js](https://github.com/influxdata/influxdb-client-js/) provides features like batch writes, retries, and error handling necessary for production-ready applications.
+
+  [`writeApi.writePoint(point)`](https://github.com/influxdata/influxdb-client-js/blob/d76b1fe8c4000d7614f44d696c964cc4492826c6/packages/core/src/impl/WriteApiImpl.ts#L256) converts each new point to [line protocol]() and then adds the line to an array in a `WriteBuffer` object.
+
+  [`writeApi.flush()`]() invokes the WriteBuffer's [`writeApi.sendBatch()`](https://github.com/influxdata/influxdb-client-js/blob/d76b1fe8c4000d7614f44d696c964cc4492826c6/packages/core/src/impl/WriteApiImpl.ts#L147) function which batches the points (to optimize network performance) and passes each batch in an HTTP POST request to the InfluxDB `/api/v2/write` endpoint.
 
   ```js
+  // Source: https://github.com/bonitoo-io/iot-center-v2/blob/3118c6576ad7bccf0b84b63f95350bdaa159324e/app/ui/src/pages/DevicePage.tsx#L188
+
   if (totalPoints > 0) {
     const batchSize = 2000
     const url =
@@ -241,7 +251,7 @@ To view the device dashboard, from the "Virtual Device" page, click the "Device 
 To generate the dashboard, the IoT Center UI queries device measurements in
 the InfluxDB bucket.
 
-IoT Center uses the `queryTable` data structure create visualizations.
+IoT Center uses the `queryTable` data structure to create visualizations.
 To instantiate a query API configuration, the IoT Center `DashboardPage` calls  [`InfluxDB({url: '/influx', token}).getQueryApi(org)`]() from the [influxdb-client-js]() Javascript client library.
 
 `queryTable(queryApi, query, options)` passes a [Flux]() query in an HTTP POST request to the InfluxDB `api/v2/query` endpoint and returns query results.

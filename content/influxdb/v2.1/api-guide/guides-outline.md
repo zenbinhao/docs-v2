@@ -26,105 +26,120 @@
 1. IoT Dev Center
    1. Architecture
       - IoT Dev Center serves a modern React UI and a server-side API (/api/env/<deviceID>).
-   2. Emulate IoT devices
-      - In IoT Dev Center, you can register __virtual devices__ that emulate real IoT devices and demonstrate the IoT Dev Center app before you advance to physical devices or other clients.
-1. Register a virtual IoT device
-    ## Authorization and authentication in InfluxDB
+
+
+## Authorization and authentication in InfluxDB
+
      IoT devices generate measurement data....
      To write time series measurements to InfluxDB, your application or device needs to be authorized.
      An InfluxDB **authorization** consists of a set of permissions and an API token.
      To authenticate InfluxDB API requests, the device passes the API token in the `Authorization` request header.
-   - On "Device Registrations" load, ...
-     - IoT Dev Center UI sends a request to the IoT Dev Center API `/api/env/<deviceID>` endpoint to retrieve `IoT Center: ` authorizations. IoT Dev Center server If the device is registered, i.e. it has an authorization in InfluxDB, then the IoT Center API returns authorization and InfluxDB configuration properties as configuration details for the device.
 
-     #### Get authorizations
+See how to [create an authorization](/influxdb/v2.1/security/tokens/create-token/).
 
-          ```js
-          /**
-           * Gets all authorizations.
-           * @return promise with an array of authorizations
-           * @see https://influxdata.github.io/influxdb-client-js/influxdb-client-apis.authorization.html
-           * @return {Array<import('@influxdata/influxdb-client-apis').Authorization>}
-           */
-          async function getAuthorizations() {
-            const {id: orgID} = await getOrganization()
-            const authorizations = await authorizationsAPI.getAuthorizations({orgID})
-            return authorizations.authorizations || []
-          }
+### IoT Center: device registrations
 
-          /**
-           * Gets all IoT Center device authorizations.
-           * @return promise with an authorization or undefined
-           * @see https://influxdata.github.io/influxdb-client-js/influxdb-client-apis.authorization.html
-           * @return {Array<import('@influxdata/influxdb-client-apis').Authorization>}
-           */
-          async function getIoTAuthorizations() {
-            const authorizations = await getAuthorizations()
-            const {id: bucketId} = await getBucket()
-            return authorizations.filter(
-              (val) =>
-                val.description.startsWith(DESC_PREFIX) &&
-                isBucketRWAuthorized(val, bucketId)
-            )
-          }
-          ```
-   - On "Register", ...
-     - If the device is not registered, IoT Dev Center API sends a request to the
-        InfluxDB API `/api/v2/authorizations` endpoint to create an API token with the name `IoT Center: DEVICE_ID`. IoT Dev Center app uses the `DESC_PREFIX` (`= "IoT Center: "`) constant variable to identify and retrieve registered devices. The new token will be used in future API requests and token management (e.g. for expiration and rotation).
+In "Device Registrations", the UI sends a request to the IoT Center API `/api/devices` endpoint. The IoT Center server app, in turn, sends a request to the InfluxDB `/api/v2/authorizations` endpoint to retrieve authorizations with the prefix `IoT Center: `.
 
-        #### Create an authorization
-        ```js
-        const {AuthorizationsAPI} = require('@influxdata/influxdb-client-apis')
-        const {getOrganization} = require('./organizations')
-        const {getBucket} = require('./buckets')
-        const authorizationsAPI = new AuthorizationsAPI(influxdb)
-        const DESC_PREFIX = 'IoT Center: '
-        const CREATE_BUCKET_SPECIFIC_AUTHORIZATIONS = false
+{{/* Source: /app/ui/src/pages/DevicesPage.ts */}}
 
-        /**
-         * Creates authorization for a supplied deviceId
-         * @param {string} deviceId client identifier
-         * @return {import('@influxdata/influxdb-client-apis').Authorization} promise with authorization or an error
-         */
-        async function createIoTAuthorization(deviceId) {
-          const {id: orgID} = await getOrganization()
-          let bucketID = undefined
-          if (CREATE_BUCKET_SPECIFIC_AUTHORIZATIONS) {
-            bucketID = await getBucket(INFLUX_BUCKET).id
-          }
-          console.log(
-            `createIoTAuthorization: deviceId=${deviceId} orgID=${orgID} bucketID=${bucketID}`
-          )
-          return await authorizationsAPI.postAuthorizations({
-            body: {
-              orgID,
-              description: DESC_PREFIX + deviceId,
-              permissions: [
-                {
-                  action: 'read',
-                  resource: {type: 'buckets', id: bucketID, orgID},
-                },
-                {
-                  action: 'write',
-                  resource: {type: 'buckets', id: bucketID, orgID},
-                },
-              ],
+```js
+// Source: github/iot-center-v2/app/server/influxdb/authorizations.js
+
+/**
+ * Gets all authorizations.
+ * @return promise with an array of authorizations
+ * @see https://influxdata.github.io/influxdb-client-js/influxdb-client-apis.authorization.html
+ * @return {Array<import('@influxdata/influxdb-client-apis').Authorization>}
+ */
+async function getAuthorizations() {
+  const {id: orgID} = await getOrganization()
+  const authorizations = await authorizationsAPI.getAuthorizations({orgID})
+  return authorizations.authorizations || []
+}
+
+/**
+ * Gets all IoT Center device authorizations.
+ * @return promise with an authorization or undefined
+ * @see https://influxdata.github.io/influxdb-client-js/influxdb-client-apis.authorization.html
+ * @return {Array<import('@influxdata/influxdb-client-apis').Authorization>}
+ */
+async function getIoTAuthorizations() {
+  const authorizations = await getAuthorizations()
+  const {id: bucketId} = await getBucket()
+  return authorizations.filter(
+    (val) =>
+      val.description.startsWith(DESC_PREFIX) &&
+      isBucketRWAuthorized(val, bucketId)
+  )
+}
+```
+
+### IoT Center: register a device
+
+  - Click "Register" button.
+  - UI calls `/api/devices/DEVICE_ID`. Calls `/api/v2/authorizations` to find a matching authorization.
+  - If the device is not registered, IoT Dev Center API sends a request to the
+    InfluxDB API `/api/v2/authorizations` endpoint to create an API token with the name `IoT Center: DEVICE_ID`. IoT Dev Center app uses the `DESC_PREFIX` (`= "IoT Center: "`) constant variable to identify and retrieve registered devices. The IoT Center app will be responsible for expiring, rotating, and managing tokens. The IoT device will use the token to authenticate API requests to InfluxDB.
+
+    #### Create an authorization
+
+    ```js
+    const {AuthorizationsAPI} = require('@influxdata/influxdb-client-apis')
+    const {getOrganization} = require('./organizations')
+    const {getBucket} = require('./buckets')
+    const authorizationsAPI = new AuthorizationsAPI(influxdb)
+    const DESC_PREFIX = 'IoT Center: '
+    const CREATE_BUCKET_SPECIFIC_AUTHORIZATIONS = false
+
+    /**
+     * Creates authorization for a supplied deviceId
+     * @param {string} deviceId client identifier
+     * @return {import('@influxdata/influxdb-client-apis').Authorization} promise with authorization or an error
+     */
+    async function createIoTAuthorization(deviceId) {
+      const {id: orgID} = await getOrganization()
+      let bucketID = undefined
+      if (CREATE_BUCKET_SPECIFIC_AUTHORIZATIONS) {
+        bucketID = await getBucket(INFLUX_BUCKET).id
+      }
+      console.log(
+        `createIoTAuthorization: deviceId=${deviceId} orgID=${orgID} bucketID=${bucketID}`
+      )
+      return await authorizationsAPI.postAuthorizations({
+        body: {
+          orgID,
+          description: DESC_PREFIX + deviceId,
+          permissions: [
+            {
+              action: 'read',
+              resource: {type: 'buckets', id: bucketID, orgID},
             },
-          })
-        }
+            {
+              action: 'write',
+              resource: {type: 'buckets', id: bucketID, orgID},
+            },
+          ],
+        },
+      })
+    }
         ```
-   - Remove a device
-     - Sends an HTTP `DELETE` request to the IoT Dev Center `/api/devices/<deviceID>` endpoint.
-   - Device settings
-     - Device configuration details are composed of your InfluxDB configuration and authorization details for the Device ID.
+### IoT Center: demo the virtual device
 
-1. Write IoT data
-  IoT Dev Center provides a "Write Missing Data" button that generates virtual IoT device `environment` [measurements]() for temperature, humidity, pressure, CO2, TVOC, latitude, and longitude for every minute over the last seven days. It writes the generated measurement data to your configured InfluxDB bucket.
+  - The IoT Center **virtual device** emulates a real IoT device by generating measurement data and writing the data to InfluxDB. Use the virtual device to demonstrate the IoT Center dashboard and the InfluxDB API before you advance to adding physical devices or other clients.
 
-  ## Write data to InfluxDB
+### IoT Center: remove a device
+  - Sends an HTTP `DELETE` request to the IoT Dev Center `/api/devices/<deviceID>` endpoint.
+  - Device settings
+    - Device configuration details are composed of your InfluxDB configuration and authorization details for the Device ID.
 
+## Write data to InfluxDB
 
-  #### nodejs
+See [Write data with the API](/influxdb/v2.1/write-data/developer-tools/api/)
+
+### IoT Center: write IoT data
+
+  IoT Center provides a "Write Missing Data" button that generates `environment` (temperature, humidity, pressure, CO2, TVOC, latitude, and longitude) [measurement]() data for the virtual device. The button generates measurements for every minute over the last seven days and writes the generated measurement data to the InfluxDB bucket you configured.
 
   To write the measurements to the InfluxDB bucket, the IoT Center UI calls [`getWriteApi(org, bucket, precision, options)`]() to instantiate a point writer from the [influxdb-client-js]() Javascript client library.
 
@@ -196,47 +211,93 @@
   ## Advanced topics
     1. Segment your data
 
-2. Device dashboard
-   IoT Center provides a "Device Dashboard" button for each registered device.
-   To generate the dashboard, the IoT Center UI queries device measurements in
-   the InfluxDB bucket.
+## Query InfluxDB
 
-   ## Query data in InfluxDB
+See [Query with the API](/influxdb/v2.1/query-data/execute-queries/influx-api/)
+
+## Query data for visualizations
+
+### Query with Flux
+
+   ```js
+   import "influxdata/influxdb/v1"    
+   from(bucket: "iot_center")
+     |> range(start: ${fluxDuration(timeStart)})
+     |> filter(fn: (r) => r._measurement == "environment")
+     |> filter(fn: (r) => r["_field"] == "Temperature" or r["_field"] == "TVOC" or r["_field"] == "Pressure" or r["_field"] == "Humidity" or r["_field"] == "CO2")
+     |> filter(fn: (r) => r.clientId == "virtual_device")
+     |> v1.fieldsAsCols()
+    ```
+
+#### Query result table
+  | _start | _stop | _time | CO2Sensor | GPSSensor | HumiditySensor | PressureSensor | TVOCSensor | TemperatureSensor | _measurement | clientId | CO2 | Humidity | Pressure | TVOC | Temperature |
+  |:----|----|----|----|----|----|----|----|----|----|----|----|----|----|----|----|
 
 
-   #### nodejs
+### IoT device dashboard
 
-     To instantiate a query API configuration, the IoT Center `DashboardPage` calls  [`InfluxDB({url: '/influx', token}).getQueryApi(org)`]() from the [influxdb-client-js]() Javascript client library.
+IoT Center provides a dashboard of data visualizations for each registered device.
+To view the device dashboard, from the "Virtual Device" page, click the "Device Dashboard" button.
+To generate the dashboard, the IoT Center UI queries device measurements in
+the InfluxDB bucket.
 
-     `queryTable(queryApi, query, options)` passes a [Flux]() query in an HTTP POST request to the InfluxDB `api/v2/query` endpoint and returns query results.
+IoT Center uses the `queryTable` data structure create visualizations.
+To instantiate a query API configuration, the IoT Center `DashboardPage` calls  [`InfluxDB({url: '/influx', token}).getQueryApi(org)`]() from the [influxdb-client-js]() Javascript client library.
 
-     ```js
-     const fetchDeviceMeasurements = async (
-       config: DeviceConfig,
-       timeStart = '-30d'
-     ): Promise<GiraffeTable> => {
-       const {
-         // influx_url: url, // use '/influx' proxy to avoid problem with InfluxDB v2 Beta (Docker)
-         influx_token: token,
-         influx_org: org,
-         influx_bucket: bucket,
-         id,
-       } = config
-       const queryApi = new InfluxDB({url: '/influx', token}).getQueryApi(org)
-       const result = await queryTable(
-         queryApi,
-         flux`
-       import "influxdata/influxdb/v1"    
-       from(bucket: ${bucket})
-         |> range(start: ${fluxDuration(timeStart)})
-         |> filter(fn: (r) => r._measurement == "environment")
-         |> filter(fn: (r) => r["_field"] == "Temperature" or r["_field"] == "TVOC" or r["_field"] == "Pressure" or r["_field"] == "Humidity" or r["_field"] == "CO2")
-         |> filter(fn: (r) => r.clientId == ${id})
-         |> v1.fieldsAsCols()`
-       )
-       return result
-     }
-     ```
+`queryTable(queryApi, query, options)` passes a [Flux]() query in an HTTP POST request to the InfluxDB `api/v2/query` endpoint and returns query results.
+
+```ts
+// Source: iot-center-v2/app/ui/src/pages/DashboardPage.tsx
+
+const fetchDeviceMeasurements = async (
+ config: DeviceConfig,
+ timeStart = '-30d'
+): Promise<GiraffeTable> => {
+ const {
+   // influx_url: url, // use '/influx' proxy to avoid problem with InfluxDB v2 Beta (Docker)
+   influx_token: token,
+   influx_org: org,
+   influx_bucket: bucket,
+   id,
+ } = config
+ const queryApi = new InfluxDB({url: '/influx', token}).getQueryApi(org)
+ const result = await queryTable(
+   queryApi,
+   flux`
+ import "influxdata/influxdb/v1"    
+ from(bucket: ${bucket})
+   |> range(start: ${fluxDuration(timeStart)})
+   |> filter(fn: (r) => r._measurement == "environment")
+   |> filter(fn: (r) => r["_field"] == "Temperature" or r["_field"] == "TVOC" or r["_field"] == "Pressure" or r["_field"] == "Humidity" or r["_field"] == "CO2")
+   |> filter(fn: (r) => r.clientId == ${id})
+   |> v1.fieldsAsCols()`
+ )
+ return result
+}
+```
+
+The `GiraffeTable` (alias `Table`) interface:
+
+```ts
+// Source: iot-center-v2/app/node_modules/@influxdata/giraffe/src/types/index.ts
+
+export interface Table {
+  getColumn: GetColumn
+  getColumnName: (columnKey: string) => string | null // null if the column is not available
+  getColumnType: (columnKey: string) => ColumnType | null // null if the column is not available
+  getOriginalColumnType: (columnKey: string) => FluxDataType | null // null if the column is not available
+  columnKeys: string[]
+  length: number
+  addColumn: (
+    columnKey: string,
+    fluxDataType: FluxDataType,
+    type: ColumnType,
+    data: ColumnData,
+    name?: string
+  ) => Table
+}
+```
+
    ## Advanced topics
      1. Optimize your queries
 1. Manage and secure tokens

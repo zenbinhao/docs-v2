@@ -81,7 +81,7 @@ The timezone We'll set this to the Unix TZ value where our bike data takes place
   json_string_fields = ["statusValue", "stAddress1", "stAddress2", "location", "landMark"]
 
   #Latest station information reported at `lastCommunicationTime`
-  json_time_key = "lastCommunicationTime"
+  json_time_key = ["lastCommunicationTime"]
 
   #Time is reported in Golang "reference time" format
   json_time_format = "2006-01-02 03:04:05 PM"

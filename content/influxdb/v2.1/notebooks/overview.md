@@ -30,7 +30,7 @@ The following options appear at the top of each notebook.
 
 {{% oss-only %}}
 
-### Preview/Run mode
+### Preview/Run mode <!--Check out in OSS-->
 
 - Select **Preview** (or press **Control+Enter**) to display results of each cell without writing data. Helps to verify that cells return expected results before writing data.
 
@@ -44,7 +44,17 @@ Select {{< caps >}}Run{{< /caps >}} (or press **Control+Enter**) to display resu
 
 {{% /cloud-only %}}
 
-### Save Notebook (appears before first save)
+### Set Auto Refresh
+
+#### Refresh Dashboard Until
+
+Select {{< caps >}}Indefinite{{< /caps >}} to refresh indefinitely. Select {{< caps >}}Custom{{< /caps >}} to enter a custom stop time with precision up to nanoseconds, and then click **{{< caps >}}Apply Time Range{{< /caps >}}**.
+
+#### Refresh Interval
+
+Select often the dashboard will refresh.
+
+### Save Notebook (appears before first save) <!--does this still exist? is it all autosave now?-->
 
 Select {{< caps >}}Save Notebook{{< /caps >}} to save all notebook cells. Once you've saved the notebook, this button disappears and the notebook automatically saves as subsequent changes are made.
 

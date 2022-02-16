@@ -202,6 +202,19 @@ To unregister a device, IoT Center deletes the device's authorization from your 
 
 See [Write data with the API](/influxdb/v2.1/write-data/developer-tools/api/)
 
+### Batch writes with the Javascript client library
+
+[influxdb-client-js](https://github.com/influxdata/influxdb-client-js/) provides features like batch writes, retries, and error handling necessary for production-ready applications.
+Batch writes reduce network use to make your application more efficient.
+1. to instantiate a point writer from the
+2. The [`writeApi.writePoint(point)`](https://github.com/influxdata/influxdb-client-js/blob/d76b1fe8c4000d7614f44d696c964cc4492826c6/packages/core/src/impl/WriteApiImpl.ts#L256) function converts each new point to [line protocol]() and adds the line to an array in a `WriteBuffer` object.
+
+3. [`writeApi.flush()`]() invokes the WriteBuffer's [`writeApi.sendBatch()`](https://github.com/influxdata/influxdb-client-js/blob/d76b1fe8c4000d7614f44d696c964cc4492826c6/packages/core/src/impl/WriteApiImpl.ts#L147)
+function to batch the points and send each batch to the
+InfluxDB `/api/v2/write` endpoint.
+
+{{% api-endpoint method="POST" endpoint="/api/v2/write" %}}
+
 ### IoT Center: write data for the virtual device
 
 The IoT Center **virtual device** emulates a real IoT device by generating measurement data and writing the data to InfluxDB.
@@ -211,22 +224,29 @@ IoT Center provides a "Write Missing Data" button that generates `environment`
 (temperature, humidity, pressure, CO2, TVOC, latitude, and longitude) [measurement]() data for the virtual device.
 The button generates measurements for every minute over the last seven days and
 writes the generated measurement data to the InfluxDB bucket you configured.
-To write the measurements to the bucket, the `writeEmulatedData(...)` function
-in **DevicePage.tsx** calls [`getWriteApi(org, bucket, precision, options)`]()
-to instantiate a point writer from the
-[influxdb-client-js](https://github.com/influxdata/influxdb-client-js/) Javascript client library.
 
-#### Batch writes with the InfluxDB API client library
+To write the measurements to the bucket, IoT Center uses the `writeEmulatedData(...)` function
+in **DevicePage.tsx**. `writeEmulatedData(...)` takes the following steps to write data to InfluxDB:
+1. Configures a new instance of the InfluxDB client
+   ```js
+   const influxDB = new InfluxDB({url, token})
+   ```
+2. To configure the client for writing, calls `getWriteApi()` with organization, bucket, timestamp precision, batch size, and default tags
+   ```js
+   const writeApi = influxDB.getWriteApi(org, bucket, 'ns', {
+     batchSize: batchSize + 1,
+     defaultTags: {clientId: id},
+   })
+   ```
+3. For each data point, calls the [`writeApi.writePoint(point)`](https://github.com/influxdata/influxdb-client-js/blob/d76b1fe8c4000d7614f44d696c964cc4492826c6/packages/core/src/impl/WriteApiImpl.ts#L256)
+   client library function
+4. Internally, `writeApi.writePoint(point)` converts each new point to
+   [line protocol]() and adds the line to an array in a `WriteBuffer` object.
+5. Calls the [`writeApi.flush()`]() client library function.
+6. Internally, `writeApi.flush()` calls the `writeApi.sendBatch()`](https://github.com/influxdata/influxdb-client-js/blob/d76b1fe8c4000d7614f44d696c964cc4492826c6/packages/core/src/impl/WriteApiImpl.ts#L147)
+   client library function to write the points in batches to the `/api/v2/write` InfluxDB API endpoint.
 
-[influxdb-client-js](https://github.com/influxdata/influxdb-client-js/) provides features like batch writes, retries, and error handling necessary for production-ready applications.
-
-[`writeApi.writePoint(point)`](https://github.com/influxdata/influxdb-client-js/blob/d76b1fe8c4000d7614f44d696c964cc4492826c6/packages/core/src/impl/WriteApiImpl.ts#L256) converts each new point to [line protocol]() and then adds the line to an array in a `WriteBuffer` object.
-
-[`writeApi.flush()`]() invokes the WriteBuffer's [`writeApi.sendBatch()`](https://github.com/influxdata/influxdb-client-js/blob/d76b1fe8c4000d7614f44d696c964cc4492826c6/packages/core/src/impl/WriteApiImpl.ts#L147)
-function to batch the points (reducing network use) and send each batch to the
-InfluxDB `/api/v2/write` endpoint.
-
-{{% api-endpoint method="POST" endpoint="/api/v2/write" %}}
+#### IoT Center: batch write example
 
 ```js
 // Source: https://github.com/bonitoo-io/iot-center-v2/blob/3118c6576ad7bccf0b84b63f95350bdaa159324e/app/ui/src/pages/DevicePage.tsx#L188
@@ -290,9 +310,6 @@ try {
 onProgress(100, pointsWritten, totalPoints)
 }
 ```
-
-  ## Advanced topics
-    1. Segment your data
 
 ## Query InfluxDB
 
@@ -394,6 +411,7 @@ export interface Table {
 ```
 
    ## Advanced topics
+     1. Segment your data
      1. Optimize your queries
 1. Manage and secure tokens
    1. InfluxDB Cloud (token access restrictions)

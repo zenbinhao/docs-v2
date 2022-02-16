@@ -35,7 +35,7 @@ An InfluxDB **authorization** consists of a set of permissions and an API token.
 
 Learn how to [create an authorization](/influxdb/v2.1/security/tokens/create-token/).
 
-### Example
+#### Example: view an authorization
 
 Authorization from [GET `/api/v2/authorizations`]()
 
@@ -74,7 +74,6 @@ To authenticate InfluxDB API requests, your device passes the API token in the `
 
 Learn how to [use an authorization](/influxdb/v2.1/security/tokens/use-tokens/).
 
-
 ### IoT Center: device registrations
 
 The **Device Registrations** page lists registered IoT devices
@@ -101,7 +100,7 @@ In InfluxDB Cloud, use the `/api/v2/authorizations` InfluxDB API endpoint to vie
 You can't view API tokens in InfluxDB Cloud UI.
 {{% /note %}}
 
-#### Create an authorization
+#### Example: create an authorization
 
 The following sample from IoT Center uses [`@influxdata/influxdb-client-apis`]() to create an authorization for an IoT device.
 
@@ -146,7 +145,7 @@ async function createIoTAuthorization(deviceId) {
 }
 ```
 
-#### IoT Center: list registered devices
+### IoT Center: list registered devices
 
 To list registered devices, the [DevicesPage](https://github.com/bonitoo-io/iot-center-v2/blob/3118c6576ad7bccf0b84b63f95350bdaa159324e/app/ui/src/pages/DevicesPage.tsx) UI component sends a request to the IoT Center API `/api/devices` endpoint.
 {{/* Source: https://github.com/bonitoo-io/iot-center-v2/blob/3118c6576ad7bccf0b84b63f95350bdaa159324e/app/ui/src/pages/DevicesPage.tsx */}}
@@ -154,6 +153,8 @@ To list registered devices, the [DevicesPage](https://github.com/bonitoo-io/iot-
 The IoT Center server app, in turn, sends a request to the `/api/v2/authorizations` InfluxDB API endpoint to retrieve authorizations.
 
 The `getIoTAuthorizations()` IoT Center server function returns authorizations with the prefix "IoT Center: " and read-write access to the configured bucket.
+
+#### Example: list authorizations
 
 ```js
 // Source: github/iot-center-v2/app/server/influxdb/authorizations.js
@@ -188,13 +189,13 @@ async function getIoTAuthorizations() {
 ```
 ### IoT Center: device details
 
-Device configuration details are composed of your InfluxDB configuration and authorization details for the Device ID.
+Device configuration details are composed of your InfluxDB configuration and authorization details for the device ID.
 
 ### IoT Center: unregister a device
 
 To unregister a device, IoT Center deletes the device's authorization from your InfluxDB organization.
 
-1. When you click the "Delete" button, IoT Center UI sends a `DELETE` request to the `/api/devices/<deviceID>` IoT Center API endpoint.
+1. When you click the "Delete" button, IoT Center UI sends a `DELETE` request to the `/api/devices/DEVICE_ID` IoT Center API endpoint.
 2. IoT Center server retrieves the list of IoT Center authorizations and finds the authorization matching the device ID.
 3. IoT Center sends a `DELETE` request to the `/api/v2/authorizations/AUTHORIZATION_ID` InfluxDB API endpoint.
 
@@ -215,7 +216,7 @@ InfluxDB `/api/v2/write` endpoint.
 
 {{% api-endpoint method="POST" endpoint="/api/v2/write" %}}
 
-### IoT Center: write data for the virtual device
+### IoT Center: batch writes for the virtual device
 
 The IoT Center **virtual device** emulates a real IoT device by generating measurement data and writing the data to InfluxDB.
 Use the virtual device to demonstrate the IoT Center dashboard and test the InfluxDB API before you advance to adding physical devices or other clients.
@@ -246,7 +247,7 @@ in **DevicePage.tsx**. `writeEmulatedData(...)` takes the following steps to wri
 6. Internally, `writeApi.flush()` calls the `writeApi.sendBatch()`](https://github.com/influxdata/influxdb-client-js/blob/d76b1fe8c4000d7614f44d696c964cc4492826c6/packages/core/src/impl/WriteApiImpl.ts#L147)
    client library function to write the points in batches to the `/api/v2/write` InfluxDB API endpoint.
 
-#### IoT Center: batch write example
+#### Example: batch and write points
 
 ```js
 // Source: https://github.com/bonitoo-io/iot-center-v2/blob/3118c6576ad7bccf0b84b63f95350bdaa159324e/app/ui/src/pages/DevicePage.tsx#L188
@@ -351,7 +352,7 @@ the InfluxDB bucket.
 
 IoT Center uses the `queryTable` data structure to create visualizations.
 To instantiate a query API configuration, the IoT Center `DashboardPage` calls the
-[`getQueryApi(org)`]() function from the [influxdb-client-js]() Javascript client library.
+[`getQueryApi(org)`]() client library function.
 
 `queryTable(queryApi, query, options)` sends a [Flux]() query in a `POST`
 request to the `api/v2/query` InfluxDB API endpoint and returns query results.

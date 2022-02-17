@@ -329,8 +329,36 @@ get the table in the returned object from calling fromFlux
 
 {{% note %}}
 Use '@influxdata/giraffe' to render gauges, plots, tables, and other visualizations in your own dashboard UI.
-To learn more about visualizations and options in Giraffe, see the [Giraffe Quick Start](https://github.com/influxdata/giraffe/blob/master/giraffe/README.md#quick-start).
+To learn more about Giraffe visualizations, options, and the columnar interface see the [Giraffe Quick Start](https://github.com/influxdata/giraffe/blob/master/giraffe/README.md#quick-start).
 {{% /note %}}
+
+### Query and transform data with the Javascript client library
+
+Although you can use the `fromFlux()` '@influxdata/giraffe' utility directly,
+the `influxdb-client-js` Javascript client library provides a `giraffe` package
+with a convenient `queryToTable(queryApi, query)` function.
+`queryToTable` returns a single `Promise` for the query and transformation of
+your data to a Giraffe [columnar](https://observablehq.com/@mbostock/manipulating-flat-arrays) table.
+
+  ```ts
+  // Source: https://github.com/influxdata/influxdb-client-js/blob/7fc386c59e718dfb452fad915ff3cd561b697536/packages/giraffe/src/queryTable.ts
+
+  export function queryToTable(
+    queryApi: QueryApi,
+    query: string | ParameterizedQuery,
+    tableFactory: GiraffeTableFactory,
+    tableOptions?: TableOptions
+  ): Promise<Table> {
+    return new Promise<FromFluxResult>((resolve, reject) => {
+      queryApi.queryRows(
+        query,
+        createCollector(resolve, reject, tableFactory, tableOptions)
+      )
+    }).then(result => result.table)
+  }
+  ```
+
+ {{% api-endpoint method="POST" endpoint="/api/v2/query" %}} [API spec]()
 
 ### IoT Center: device dashboard
 
@@ -366,7 +394,8 @@ To view the device dashboard, on the "Virtual Device" page, click the
 IoT Center UI `DashboardPage` executes the following steps to generate a dashboard visualization:
 1. Calls the
 [`getQueryApi(org)`]() client library function to configure the client for querying.
-2. Calls the `queryTable(queryApi, query, options)` IoT Center function with the configuration and the [Flux]() query
+2. Calls the `queryTable(queryApi, query, options)` IoT Center function with the query configuration and the [Flux]() query
+3. Returns a Promise that resolves with query result data as a [Giraffe Table interface](https://github.com/influxdata/giraffe/).
 
   ```ts
   // Source: https://github.com/bonitoo-io/iot-center-v2/blob/master/app/ui/src/util/queryTable.ts
@@ -380,31 +409,7 @@ IoT Center UI `DashboardPage` executes the following steps to generate a dashboa
   }
   ```
 
-3. `queryTable` calls the `queryToTable` [InfluxDB Javascript client library]() function.
-4. `queryToTable` calls the `queryRows` [InfluxDB Javascript client library]() function to send a `POST`
-request with the query to the `api/v2/query` InfluxDB API endpoint.
-
-  ```ts
-  // Source: https://github.com/influxdata/influxdb-client-js/blob/7fc386c59e718dfb452fad915ff3cd561b697536/packages/giraffe/src/queryTable.ts
-  
-  export function queryToTable(
-    queryApi: QueryApi,
-    query: string | ParameterizedQuery,
-    tableFactory: GiraffeTableFactory,
-    tableOptions?: TableOptions
-  ): Promise<Table> {
-    return new Promise<FromFluxResult>((resolve, reject) => {
-      queryApi.queryRows(
-        query,
-        createCollector(resolve, reject, tableFactory, tableOptions)
-      )
-    }).then(result => result.table)
-  }
-  ```
-
-5. `queryToTable` transforms the query result CSV into a Giraffe table and returns the table.
-
-{{% api-endpoint method="POST" endpoint="/api/v2/query" %}} [API spec]()
+4. Renders `Gauge` and `Plot` components with the data
 
 #### Example: query data with Flux and the Javascript client library
 ```ts
